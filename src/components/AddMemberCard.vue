@@ -1,10 +1,12 @@
 <template>
   <div class="add-member-card">
-    <span>이름</span>
-    <span>이메일</span>
-    <q-input label="설명" />
-    <q-input label="역할" />
-    <q-btn label="삭제" @click="onClickDelete" />
+    <div class="member-info">
+      <span>이름</span>
+      <span>이메일</span>
+    </div>
+    <q-input label="설명" v-model="memberDescription" />
+    <q-input label="역할" v-model="memberRole" />
+    <q-btn label="search" @click="onClickDelete" flat />
   </div>
 </template>
 
@@ -16,7 +18,8 @@ export default {
       vueName: "add-members",
       memberEmail: "",
       member: null,
-      memberDescription: ""
+      memberDescription: "",
+      memberRole: ""
     };
   },
   methods: {
@@ -27,8 +30,18 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .add-member-card {
-  border: 1px black solid;
+  // border: 1px black solid;
+  padding: 20px;
+  margin-bottom: 40px;
+  border-radius: 29px;
+  background: #ffffff;
+  box-shadow: 5px 5px 10px #bdbdbd, -5px -5px 10px #ffffff;
+  .member-info {
+    span {
+      margin-left: 10px;
+    }
+  }
 }
 </style>
