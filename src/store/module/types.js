@@ -1,0 +1,4 @@
+export const T = {
+  CHANGE_TOP_STYLE: "CHANGE_TOP_STYLE",
+  SIGNIN: "SIGNIN"
+};
