@@ -4,7 +4,15 @@
       <h1>서비스 이름 or 서비스 로고</h1>
       <q-input label="Email" type="email" v-model="email" />
       <q-input label="Password" type="password" v-model="password" />
-      <q-btn flat label="Sign in" @click="onClickSignIn" />
+      <q-slide-transition>
+        <div class="card-input" v-if="signUpOpened">
+          <q-input label="Name" v-model="name" />
+        </div>
+      </q-slide-transition>
+      <div class="card-buttons">
+        <q-btn flat :label="signUpOpened ? 'Cancel' : 'Sign in'" @click="onClickSignIn" />
+        <q-btn flat label="Sign up" @click="onClickSignUp" />
+      </div>
     </div>
   </div>
 </template>
@@ -16,7 +24,9 @@ export default {
   data() {
     return {
       email: "",
-      password: ""
+      password: "",
+      name: "",
+      signUpOpened: false
     };
   },
   mounted() {
@@ -27,20 +37,51 @@ export default {
       this.$router.push(`${pageName}`);
     },
     onClickSignIn() {
-      if (this.email == "") {
-        alert("이메일을 입력해주세요.");
-      } else if (this.password == "") {
-        alert("비밀번호를 입력해주세요.");
+      if (this.signUpOpened) {
+        this.signUpOpened = false;
       } else {
-        let vue = this;
-        this.$store.dispatch(T.SIGNIN, {
-          email: this.email,
-          password: this.password,
-          cb: () => {
-            console.log("Sign In");
-            vue.movePage("/ProjectList");
-          }
-        });
+        if (this.email == "") {
+          alert("이메일을 입력해주세요.");
+        } else if (this.password == "") {
+          alert("비밀번호를 입력해주세요.");
+        } else {
+          let vue = this;
+          this.$store.dispatch(T.SIGN_IN, {
+            email: this.email,
+            password: this.password,
+            cb: () => {
+              console.log("Sign In");
+              vue.movePage("/ProjectList");
+            }
+          });
+        }
+      }
+    },
+    onClickSignUp() {
+      if (this.signUpOpened) {
+        if (this.email == "") {
+          alert("이메일을 입력해주세요.");
+        } else if (this.password == "") {
+          alert("비밀번호를 입력해주세요.");
+        } else if (this.name == "") {
+          alert("이름을 입력해주세요.");
+        } else {
+          let vue = this;
+          this.$store.dispatch(T.SIGN_UP, {
+            email: this.email,
+            password: this.password,
+            name: this.name,
+            cb: () => {
+              console.log("Sign Up");
+              vue.email = "";
+              vue.password = "";
+              vue.name = "";
+              vue.signUpOpened = false;
+            }
+          });
+        }
+      } else {
+        this.signUpOpened = true;
       }
     }
   }
@@ -63,9 +104,21 @@ export default {
       width: 30%;
       margin-bottom: 10px;
     }
-
-    button {
+    .card-input {
       width: 30%;
+      label {
+        width: 100%;
+      }
+    }
+
+    .card-buttons {
+      width: 30%;
+      display: flex;
+      justify-content: space-between;
+
+      button {
+        width: 48%;
+      }
     }
   }
 }
