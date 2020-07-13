@@ -6,7 +6,7 @@
     </div>
     <q-input label="설명" v-model="memberDescription" />
     <q-input label="역할" v-model="memberRole" />
-    <q-btn label="search" @click="onClickDelete" flat />
+    <q-btn label="삭제" @click="onClickDelete" flat />
   </div>
 </template>
 
