@@ -11,10 +11,20 @@ export default {
   },
   mounted() {
     this.$store.dispatch(T.CHANGE_TOP_STYLE, "");
+
+    this.getProjects();
   },
   methods: {
     movePage(pageName) {
       this.$router.push(`${pageName}`);
+    },
+    getProjects() {
+      this.$store.dispatch(T.GET_PROJECTS, {
+        userId: "",
+        cb: () => {
+          console.log("GET_PROJECTS");
+        }
+      });
     }
   }
 };
