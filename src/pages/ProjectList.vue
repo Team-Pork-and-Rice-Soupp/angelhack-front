@@ -1,12 +1,19 @@
 <template>
   <div class="project-list">
-    <workspace-card :clickAction="action1" v-for="(item, index) in projects" :key="index">
+    <workspace-card :workspaceId="item.Id" v-for="(item, index) in projects" :key="index">
       <template v-slot:card-title>{{item.title}}</template>
       <template v-slot:card-description>{{item.description}}</template>
-      <template v-slot:card-action></template>
     </workspace-card>
-    <workspace-card :clickAction="addProject">
-      <template v-slot:card-title>+</template>
+    <workspace-card :workspaceId="item.Id" v-for="(item, index) in projects" :key="index">
+      <template v-slot:card-title>{{item.title}}</template>
+      <template v-slot:card-description>{{item.description}}</template>
+    </workspace-card>
+    <workspace-card :workspaceId="item.Id" v-for="(item, index) in projects" :key="index">
+      <template v-slot:card-title>{{item.title}}</template>
+      <template v-slot:card-description>{{item.description}}</template>
+    </workspace-card>
+    <workspace-card :addButton="true">
+      <template v-slot:add-card>new+</template>
     </workspace-card>
   </div>
 </template>
@@ -21,11 +28,13 @@ export default {
       projects: [
         {
           title: "test1",
-          description: "설명입니다."
+          description: "설명입니다.",
+          Id: "q1w2e3r4"
         },
         {
           title: "test2",
-          description: "설명입니다."
+          description: "설명입니다.",
+          Id: "mansbuy13579"
         }
       ]
     };
@@ -62,6 +71,9 @@ export default {
 
 <style lang="scss" scoped>
 .project-list {
+  width: 70%;
+  margin: 0 auto;
   display: flex;
+  flex-wrap: wrap;
 }
 </style>
