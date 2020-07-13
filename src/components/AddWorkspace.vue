@@ -1,17 +1,22 @@
 <template>
   <div class="work-space-form">
-    <q-input v-model="title" label="title" />
-    <q-input v-model="description" label="description" autogrow />
+    <div class="inputs">
+      <q-input v-model="title" label="title" />
+      <q-input v-model="description" label="description" autogrow />
 
-    <q-form class="search-form" @submit="searchMember">
-      <q-input ref="keyword" v-model="keyword" placeholder="검색어를 입력해주세요." />
+      <q-form class="search-form" @submit="searchMember">
+        <q-input ref="keyword" v-model="keyword" placeholder="검색어를 입력해주세요." />
 
-      <div class="search-form__button">
-        <q-btn flat label="Search" color="blue" type="submit" />
-      </div>
-    </q-form>
+        <div class="search-form__button">
+          <q-btn flat label="Search" color="blue" type="submit" />
+        </div>
+      </q-form>
+    </div>
 
-    <add-member-card></add-member-card>
+    <div class="member-cards">
+      <add-member-card v-for="(member, index) in members" :key="index" />
+    </div>
+
     <!-- Dialog -->
     <q-dialog v-model="dialogOpened">
       <div>
@@ -33,6 +38,11 @@ export default {
   name: "add-workspace",
   components: {
     AddMemberCard
+  },
+  created() {
+    for (let i = 0; i < 3; i++) {
+      this.members.push({});
+    }
   },
   data() {
     return {
@@ -62,11 +72,14 @@ export default {
 <style lang="scss" scoped>
 .work-space-form {
   width: 30%;
-  .search-form {
-    display: flex;
-    justify-content: space-between;
-    &__button {
-      height: 100%;
+  .inputs {
+    margin-bottom: 40px;
+    .search-form {
+      display: flex;
+      justify-content: space-between;
+      &__button {
+        height: 100%;
+      }
     }
   }
 }
