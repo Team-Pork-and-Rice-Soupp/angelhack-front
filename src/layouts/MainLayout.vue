@@ -1,109 +1,81 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="leftDrawerOpen = !leftDrawerOpen"
-        />
+  <div class="mylayout">
+    <div class="mylayout__top" :class="topStyle">
+      <div class="title">Title</div>
+      <div>Moon Juhan</div>
+    </div>
 
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
+    <div class="mylayout__contents">
+      <router-view></router-view>
+    </div>
 
-        <div>Quasar v{{ $q.version }}</div>
-      </q-toolbar>
-    </q-header>
-
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-      content-class="bg-grey-1"
-    >
-      <q-list>
-        <q-item-label
-          header
-          class="text-grey-8"
-        >
-          Essential Links
-        </q-item-label>
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
-
-    <q-page-container>
-      <router-view />
-    </q-page-container>
-  </q-layout>
+    <div class="mylayout__overlay" v-if="loading">
+      <q-spinner color="white" size="5em" />
+    </div>
+  </div>
 </template>
 
 <script>
-import EssentialLink from 'components/EssentialLink.vue'
+import { mapGetters } from "vuex";
 
 export default {
-  name: 'MainLayout',
-
-  components: {
-    EssentialLink
+  name: "MainLayout",
+  computed: {
+    ...mapGetters({
+      topStyle: "getTopStyle"
+    })
   },
-
-  data () {
+  data() {
     return {
-      leftDrawerOpen: false,
-      essentialLinks: [
-        {
-          title: 'Docs',
-          caption: 'quasar.dev',
-          icon: 'school',
-          link: 'https://quasar.dev'
-        },
-        {
-          title: 'Github',
-          caption: 'github.com/quasarframework',
-          icon: 'code',
-          link: 'https://github.com/quasarframework'
-        },
-        {
-          title: 'Discord Chat Channel',
-          caption: 'chat.quasar.dev',
-          icon: 'chat',
-          link: 'https://chat.quasar.dev'
-        },
-        {
-          title: 'Forum',
-          caption: 'forum.quasar.dev',
-          icon: 'record_voice_over',
-          link: 'https://forum.quasar.dev'
-        },
-        {
-          title: 'Twitter',
-          caption: '@quasarframework',
-          icon: 'rss_feed',
-          link: 'https://twitter.quasar.dev'
-        },
-        {
-          title: 'Facebook',
-          caption: '@QuasarFramework',
-          icon: 'public',
-          link: 'https://facebook.quasar.dev'
-        },
-        {
-          title: 'Quasar Awesome',
-          caption: 'Community Quasar projects',
-          icon: 'favorite',
-          link: 'https://awesome.quasar.dev'
+      loading: false
+    };
+  }
+};
+</script>
+
+<style lang="scss">
+html {
+  width: 100vw;
+  height: 100vh;
+  #q-app {
+    height: 100vh;
+    .mylayout {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      &__top {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #bababa;
+        padding: 10px 15px;
+
+        .title {
+          font-size: 16px;
+          font-weight: bold;
         }
-      ]
+      }
+
+      .none {
+        display: none;
+      }
+
+      &__contents {
+        padding: 10px 15px;
+        height: 100%;
+      }
+
+      &__overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: #5c656bcc;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
     }
   }
 }
-</script>
+</style>
