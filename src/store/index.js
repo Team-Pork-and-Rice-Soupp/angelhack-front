@@ -3,7 +3,10 @@ import Vuex from 'vuex'
 
 import example from "./module";
 
+import mojs from '@mojs/core'
+
 Vue.use(Vuex)
+Vue.use(mojs)
 
 /*
  * If not building with SSR mode, you can
