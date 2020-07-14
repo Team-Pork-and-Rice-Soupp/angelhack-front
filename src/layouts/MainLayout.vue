@@ -34,6 +34,9 @@ export default {
 </script>
 
 <style lang="scss">
+.row {
+  margin: 0;
+}
 html {
   width: 100vw;
   height: 100vh;

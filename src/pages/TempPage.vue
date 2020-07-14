@@ -9,7 +9,7 @@
             <template v-slot:card-title>워크스페이스 2</template>
             <template v-slot:card-description>이것은 워크스페이스2 입니다. 가나다라마바사아 자차카타ㅠ파하.</template>
             <template v-slot:card-action>
-                <q-btn label="나가기" @click="alert = true" flat color="red" />
+                <q-btn label="나가기" @click="alert = true" flat color="negative" />
             </template>
         </workspace-card>
 

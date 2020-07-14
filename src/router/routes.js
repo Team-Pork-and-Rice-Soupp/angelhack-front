@@ -21,6 +21,21 @@ const routes = [
       { path: "", component: () => import('pages/AddProject.vue') }
     ]
   },
+  {
+    path: '/AddMeetingLog',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: "", component: () => import('pages/AddMeetingLog.vue') }
+    ]
+  },
+  {
+    path: '/MeetingLog',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: "", component: () => import('pages/MeetingLog.vue') }
+    ]
+  },
+
 
 
   {
