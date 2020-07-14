@@ -32,6 +32,14 @@ const routes = [
   },
 
   {
+    path: '/StepIntro',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: "", component: () => import('pages/StepIntro.vue') }
+    ]
+  },
+
+  {
     path: '/EditWorkspace',
     component: () => import('layouts/MainLayout.vue'),
     children: [
