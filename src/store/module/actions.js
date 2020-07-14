@@ -22,5 +22,9 @@ export const actions = {
     [T.GET_PROJECTS]({ commit }, params) {
         console.log(params);
         if (params.cb) params.cb();
-    }
+    },
+    [T.GET_WORKSPACE_DETAIL]({ commit }, params) {
+        console.log(params.id);
+        if (params.cb) params.cb("test");
+    },
 };
