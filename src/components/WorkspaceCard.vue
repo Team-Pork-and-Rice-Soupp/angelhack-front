@@ -32,11 +32,14 @@ export default {
     return {};
   },
   methods: {
+    movePage(pageName) {
+      this.$router.push(`${pageName}`);
+    },
     clickAction() {
-      if(this.addButton) {
-        this.$router.push('/AddProject')
+      if (this.addButton) {
+        this.$router.push("/AddProject");
       } else {
-        alert(`this workspace's id >> ${this.workspaceId}`);
+        this.movePage("/Dashboard?id=" + this.workspaceId);
       }
     }
   }
@@ -66,7 +69,7 @@ export default {
     font-size: 10px;
   }
   .add-card {
-    font-size: 60px;    
+    font-size: 60px;
     font-weight: bold;
     text-align: center;
   }
