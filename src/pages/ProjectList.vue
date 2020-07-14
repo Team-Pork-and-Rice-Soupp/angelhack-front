@@ -4,14 +4,6 @@
       <template v-slot:card-title>{{item.title}}</template>
       <template v-slot:card-description>{{item.description}}</template>
     </workspace-card>
-    <workspace-card :workspaceId="item.Id" v-for="(item, index) in projects" :key="index">
-      <template v-slot:card-title>{{item.title}}</template>
-      <template v-slot:card-description>{{item.description}}</template>
-    </workspace-card>
-    <workspace-card :workspaceId="item.Id" v-for="(item, index) in projects" :key="index">
-      <template v-slot:card-title>{{item.title}}</template>
-      <template v-slot:card-description>{{item.description}}</template>
-    </workspace-card>
     <workspace-card :addButton="true">
       <template v-slot:add-card>new+</template>
     </workspace-card>
