@@ -22,6 +22,31 @@ const routes = [
     ]
   },
 
+
+  {
+    path: '/Dashboard',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: "", component: () => import('pages/Dashboard.vue') }
+    ]
+  },
+
+  {
+    path: '/StepIntro',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: "", component: () => import('pages/StepIntro.vue') }
+    ]
+  },
+
+  {
+    path: '/EditWorkspace',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: "", component: () => import('pages/EditWorkspace.vue') }
+    ]
+  },
+
   // Always leave this as last one,
   // but you can also remove it
   {
