@@ -16,6 +16,7 @@
 
     <!-- 멤버 카드들 -->
     <div class="member-cards">
+      <add-member-card :memberInfo="myself" />
       <add-member-card v-for="(member, index) in members" :key="index" :memberInfo="member" />
     </div>
 
@@ -82,6 +83,10 @@ export default {
       title: "",
       description: "",
       members: [],
+      myself: {
+        name: `Moon Juhan`, // layout 우측상단의 이름... 아마 vuex에서 들고있는건가? 그거 접근해서 하면 될듯
+        email: `MJ@mail.com`,
+      },
       keyword: "",
       dialogOpened: false,
 
