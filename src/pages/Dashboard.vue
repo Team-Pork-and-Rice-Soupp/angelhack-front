@@ -91,11 +91,17 @@
 
 <script>
 import { T } from "../store/module/types.js";
-import StepFab from "../components/StepFAB";
+import { mapGetters } from "vuex";
 
+import StepFab from "../components/StepFAB";
 export default {
   components: {
     StepFab
+  },
+  computed: {
+    ...mapGetters({
+      workspaceId: "getWorkspaceId"
+    })
   },
   data() {
     return {
@@ -145,7 +151,11 @@ export default {
   },
   mounted() {
     const id = this.$route.query.id;
-    this.getWorkspace(id);
+    if (id) {
+      this.getWorkspace(id);
+    } else {
+      this.getWorkspace(this.workspaceId);
+    }
   },
   methods: {
     movePage(pageName) {
@@ -154,6 +164,7 @@ export default {
     getWorkspace(id) {
       if (id) {
         console.log(id);
+        this.$store.dispatch(T.CHANGE_WORKSPACE_ID, id);
         this.$store.dispatch(T.GET_WORKSPACE_DETAIL, {
           id,
           cb: res => {

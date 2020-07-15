@@ -5,5 +5,9 @@ export const mutations = {
         state.topStyle = string;
     },
 
+    [T.CHANGE_WORKSPACE_ID](state, workspaceId) {
+        state.workspaceId = workspaceId;
+    },
+
 
 };

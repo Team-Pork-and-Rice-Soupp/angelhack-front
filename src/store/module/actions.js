@@ -189,4 +189,8 @@ export const actions = {
         */
         if (params.cb) params.cb("test");
     },
+
+    [T.CHANGE_WORKSPACE_ID]({ commit }, workspaceId) {
+        commit(T.CHANGE_WORKSPACE_ID, workspaceId);
+    }
 };
