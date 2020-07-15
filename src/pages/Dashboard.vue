@@ -21,15 +21,45 @@
     <div class="dashboard__mid">
       <q-card class="card__step">
         <div class="step-wrapper">
-          <step-fab title="문제 인식" description="설명" :stepData="stepData[0]" :addStep="addStep"></step-fab>
+          <step-fab
+            title="문제 인식"
+            description="설명"
+            :stepData="stepData[0]"
+            :addStep="addStep"
+            ref="fab01"
+          ></step-fab>
           <hr />
-          <step-fab title="문제 정의" description="설명" :stepData="stepData[1]" :addStep="addStep"></step-fab>
+          <step-fab
+            title="문제 정의"
+            description="설명"
+            :stepData="stepData[1]"
+            :addStep="addStep"
+            ref="fab02"
+          ></step-fab>
           <hr />
-          <step-fab title="문제 정검" description="설명" :stepData="stepData[2]" :addStep="addStep"></step-fab>
+          <step-fab
+            title="문제 정검"
+            description="설명"
+            :stepData="stepData[2]"
+            :addStep="addStep"
+            ref="fab03"
+          ></step-fab>
           <hr />
-          <step-fab title="아이디어 도출" description="설명" :stepData="stepData[3]" :addStep="addStep"></step-fab>
+          <step-fab
+            title="아이디어 도출"
+            description="설명"
+            :stepData="stepData[3]"
+            :addStep="addStep"
+            ref="fab04"
+          ></step-fab>
           <hr />
-          <step-fab title="IF" description="설명" :stepData="stepData[4]" :addStep="addStep"></step-fab>
+          <step-fab
+            title="IF"
+            description="설명"
+            :stepData="stepData[4]"
+            :addStep="addStep"
+            ref="fab05"
+          ></step-fab>
         </div>
       </q-card>
     </div>
@@ -151,6 +181,41 @@ export default {
           break;
         case "IF":
           this.movePage("/StepIntro?type=4");
+          break;
+      }
+    },
+
+    toggleFAB(title) {
+      switch (title) {
+        case "문제 인식":
+          this.$refs.fab02.hideFAB();
+          this.$refs.fab03.hideFAB();
+          this.$refs.fab04.hideFAB();
+          this.$refs.fab05.hideFAB();
+          break;
+        case "문제 정의":
+          this.$refs.fab01.hideFAB();
+          this.$refs.fab03.hideFAB();
+          this.$refs.fab04.hideFAB();
+          this.$refs.fab05.hideFAB();
+          break;
+        case "문제 정검":
+          this.$refs.fab01.hideFAB();
+          this.$refs.fab02.hideFAB();
+          this.$refs.fab04.hideFAB();
+          this.$refs.fab05.hideFAB();
+          break;
+        case "아이디어 도출":
+          this.$refs.fab01.hideFAB();
+          this.$refs.fab02.hideFAB();
+          this.$refs.fab03.hideFAB();
+          this.$refs.fab05.hideFAB();
+          break;
+        case "IF":
+          this.$refs.fab01.hideFAB();
+          this.$refs.fab02.hideFAB();
+          this.$refs.fab03.hideFAB();
+          this.$refs.fab04.hideFAB();
           break;
       }
     },

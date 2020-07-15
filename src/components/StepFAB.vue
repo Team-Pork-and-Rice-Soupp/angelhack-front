@@ -6,6 +6,8 @@
         icon="keyboard_arrow_down"
         direction="down"
         :disable="stepData.locked"
+        ref="fab"
+        @show="showFAB()"
       >
         <q-fab-action
           external-label
@@ -37,6 +39,12 @@ export default {
   methods: {
     onClick() {
       console.log("click");
+    },
+    hideFAB() {
+      this.$refs.fab.hide();
+    },
+    showFAB() {
+      this.$parent.$parent.toggleFAB(this.title);
     }
   }
 };
