@@ -88,7 +88,8 @@ export default {
   },
   mounted() {
     this.initSummernote();
-    this.selectTemplate(this.$route.params.template);
+    this.selectedTemplate = this.$route.params.template;
+    this.selectTemplate();
   },
   methods: {
     initSummernote() {
