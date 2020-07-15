@@ -12,7 +12,7 @@
       <q-card-section>
         <div class="text-h3">{{item.name}}</div>
         <div class="text-subtitle1">{{item.description}}</div>
-        <q-btn label="Create" @click="onClick(item.name)" />
+        <q-btn label="Create" @click="onClick(item)" />
       </q-card-section>
     </q-card>
   </div>
@@ -47,15 +47,18 @@ export default {
           this.contents = [
             {
               name: "SWOT",
-              description: "도구 설명"
+              description: "도구 설명",
+              query: "1-1"
             },
             {
               name: "브레인 스토밍",
-              description: "도구 설명"
+              description: "도구 설명",
+              query: "1-2"
             },
             {
               name: "PEST 분석",
-              description: "도구 설명"
+              description: "도구 설명",
+              query: "1-3"
             }
           ];
           break;
@@ -65,15 +68,18 @@ export default {
           this.contents = [
             {
               name: "5whys",
-              description: "도구 설명"
+              description: "도구 설명",
+              query: "2-1"
             },
             {
               name: "원인 결과 도표",
-              description: "도구 설명"
+              description: "도구 설명",
+              query: "2-2"
             },
             {
               name: "파레토 차트",
-              description: "도구 설명"
+              description: "도구 설명",
+              query: "2-3"
             }
           ];
           break;
@@ -83,11 +89,13 @@ export default {
           this.contents = [
             {
               name: "Logic Tree",
-              description: "도구 설명"
+              description: "도구 설명",
+              query: "3-1"
             },
             {
               name: "육하원칙(5W3H)",
-              description: "도구 설명"
+              description: "도구 설명",
+              query: "3-2"
             }
           ];
           break;
@@ -102,23 +110,27 @@ export default {
           this.contents = [
             {
               name: "ASIS-TOBE",
-              description: "도구 설명"
+              description: "도구 설명",
+              query: "5-1"
             },
             {
               name: "Time Line",
-              description: "도구 설명"
+              description: "도구 설명",
+              query: "5-2"
             },
             {
               name: "축약해서 설명하기",
-              description: "도구 설명"
+              description: "도구 설명",
+              query: "5-3"
             }
           ];
           break;
       }
       console.log(this.title, this.description);
     },
-    onClick(name) {
-      console.log(name);
+    onClick(step) {
+      console.log(step);
+      this.movePage("/CreateTools?type=" + step.query);
     }
   }
 };
