@@ -25,7 +25,12 @@ const routes = [
     path: '/AddMeetingLog',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: "", component: () => import('pages/AddMeetingLog.vue') }
+      { 
+        name: "AddMeetingLog",
+        path: "", 
+        component: () => import('pages/AddMeetingLog.vue'),
+        props: true
+      }
     ]
   },
   {
@@ -33,6 +38,13 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: "", component: () => import('pages/MeetingLog.vue') }
+    ]
+  },
+  {
+    path: '/ContributionStat',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: "", component: () => import('pages/ContributionStat.vue') }
     ]
   },
 

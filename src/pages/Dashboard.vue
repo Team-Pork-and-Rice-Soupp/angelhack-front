@@ -66,12 +66,12 @@
     <div class="dashboard__bottom">
       <q-card class="card__meeting-log">
         <q-card-section>
-          <q-btn label="회의록 생성" @click="movePage('/AddMeetingLog')" />
+          <q-btn label="회의록 생성" @click="createMeetingLog" />
           <q-btn label="회의록 확인" @click="movePage('/MeetingLog')" />
         </q-card-section>
       </q-card>
 
-      <q-card class="card__contibution">
+      <q-card class="card__contribution" :class="seeResult" @click="showContribution">
         <q-card-section>기여도 관련</q-card-section>
       </q-card>
     </div>
@@ -85,6 +85,43 @@
           <q-btn flat label="종료" color="red" @click="movePage('/ProjectList')" />
         </div>
       </div>
+    </q-dialog>
+
+    <!-- 회의록 템플릿 선택 Dialog -->
+    <q-dialog v-model="logTemplateDialog">
+      <q-card class="meeting-log__dialog" style="max-width: 100vw;">
+
+        <q-card-section horizontal class="card-container">
+
+
+          <q-card-section>
+            <q-card class="card-container__card" @click="selectTemplate(templates.template1)">
+              <div v-html="templates.template1"></div>
+            </q-card>
+          </q-card-section>
+
+          <q-card-section>
+            <q-card class="card-container__card" @click="selectTemplate(templates.template2)">
+              <div v-html="templates.template2"></div>
+            </q-card>
+          </q-card-section>
+
+          <q-card-section>
+            <q-card class="card-container__card" @click="selectTemplate(templates.template3)">
+              <div v-html="templates.template3"></div>
+            </q-card>
+          </q-card-section>
+          
+          
+        </q-card-section>
+
+
+        <q-card-section class="card-container__foot">
+          <span>회의록 템플릿을 선택하세요. (템플릿을 다시 설정하면 이전에 작성된 글은 저장되지 않고 지워집니다.)</span>
+          <q-btn label="템플릿 없이 시작하기" color="dark" flat @click="selectTemplate(null)" />
+        </q-card-section>
+
+      </q-card>
     </q-dialog>
   </div>
 </template>
@@ -101,7 +138,13 @@ export default {
   computed: {
     ...mapGetters({
       workspaceId: "getWorkspaceId"
-    })
+    }),
+    seeResult() {
+      return {
+        "result-button": this.dummy_data_from_server.isAllDone
+      }
+    }
+
   },
   data() {
     return {
@@ -146,7 +189,17 @@ export default {
           writed: []
         }
       ],
-      dialogOpened: false
+      dialogOpened: false,
+      logTemplateDialog: false,
+
+      templates: {
+        template1: `<p>회의록 제목:</p><p>날짜:</p><p>참여인원:</p>`,
+        template2: `<p><b>템플릿2</b><br></p><p style="box-sizing: inherit; -webkit-tap-highlight-color: transparent; margin: 0px 0px 16px; color: rgb(51, 51, 51); font-family: Roboto, -apple-system, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial;"><u>와 더멋지다!</u></p><ol><li style="box-sizing: inherit; -webkit-tap-highlight-color: transparent; margin: 0px 0px 16px; color: rgb(51, 51, 51); font-family: Roboto, -apple-system, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial;">우와</li></ol>`,
+        template3: "<p>템플릿 3</p>"
+      },
+      dummy_data_from_server: {
+        isAllDone: true // 프로젝트의 모든 단계를 다 마치고 기여도확인을 할 수 있나? boolean
+      }
     };
   },
   mounted() {
@@ -158,6 +211,18 @@ export default {
     }
   },
   methods: {
+    showContribution() {
+      if(this.dummy_data_from_server.isAllDone) {
+        this.$router.push("/ContributionStat");
+      }
+    },
+    selectTemplate(template) {
+      this.$router.push({name:"AddMeetingLog", params:{"template": template}});
+      this.logTemplateDialog = false;
+    },
+    createMeetingLog() {
+      this.logTemplateDialog = true;
+    },
     movePage(pageName) {
       this.$router.push(`${pageName}`);
     },
@@ -298,10 +363,33 @@ export default {
     &__meeting-log {
       width: 59%;
     }
-    &__contibution {
-      width: 39%;
+    &__contribution {
+      width: 39%;      
     }
   }
 }
 </style>
 
+<style lang="scss">
+.dashboard-dialog {
+  background-color: white;
+  width: 40%;
+
+  &__text {
+    padding: 20px;
+  }
+
+  &__buttons {
+    display: flex;
+    border-top: 1px solid black;
+    button {
+      width: 50%;
+    }
+  }
+}
+.result-button {
+  &:hover {
+    cursor: pointer;
+  }
+}
+</style>
