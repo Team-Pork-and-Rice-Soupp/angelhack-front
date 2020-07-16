@@ -81,6 +81,13 @@ const routes = [
       { path: "", component: () => import('pages/EditWorkspace.vue') }
     ]
   },
+  {
+    path: '/pareto-temp',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: "", component: () => import('components/ParetoChart.vue') }
+    ]
+  },
 
   // Always leave this as last one,
   // but you can also remove it
