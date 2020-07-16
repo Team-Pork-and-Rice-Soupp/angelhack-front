@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import Chart from "../components/Chart.vue";
+import Chart from "../components/BarChart.vue";
 export default {
   name: "contribution-stat",
   components: {
