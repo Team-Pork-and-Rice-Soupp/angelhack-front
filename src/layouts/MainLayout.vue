@@ -81,4 +81,20 @@ html {
     }
   }
 }
+.dashboard-dialog {
+  background-color: white;
+  width: 40%;
+
+  &__text {
+    padding: 20px;
+  }
+
+  &__buttons {
+    display: flex;
+    border-top: 1px solid black;
+    button {
+      width: 50%;
+    }
+  }
+}
 </style>

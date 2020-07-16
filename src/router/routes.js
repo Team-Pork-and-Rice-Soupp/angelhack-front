@@ -48,6 +48,14 @@ const routes = [
     ]
   },
 
+  {
+    path: '/CreateTools',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: "", component: () => import('pages/CreateTools.vue') }
+    ]
+  },
+
 
 
   {
