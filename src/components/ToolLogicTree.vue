@@ -2,7 +2,10 @@
   <div class="logic-tree">
     <div v-for="(block, index) in logicTree" :key="index" class="logic-tree__block">
       <div class="node-wrapper">
-        <div class="node" v-for="(node, index) in block.node" :key="index">{{node.label}}</div>
+        <div class="node" v-for="(node, index) in block.node" :key="index">
+          <span>{{node.label}}</span>
+          <q-btn label="삭제" @click="onClickDelete(block,index)" />
+        </div>
       </div>
       <q-btn label="Add" @click="onClickAddNode(block, index)" />
     </div>
