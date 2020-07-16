@@ -93,7 +93,7 @@
       </div>
       <!-- 3-1 Logic Tree -->
       <div v-else-if="title == 'Logic Tree'">
-        <logic-tree :logicTree="logicTree" />
+        <logic-tree />
       </div>
       <!-- 3-2 육하원칙 -->
       <div v-else-if="title == '육하원칙'" class="five-w-one-h">
@@ -210,11 +210,6 @@ export default {
         }
       ],
       fiveWhys: ["", "", "", "", "", ""],
-      logicTree: [
-        {
-          node: []
-        }
-      ],
       fiveWOneH: [
         {
           label: "Who",
