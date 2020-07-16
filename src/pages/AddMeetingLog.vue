@@ -19,6 +19,10 @@
 
     <div id="summernote"></div>
 
+    <div style="display: flex;">
+      <q-btn label="저장" color="primary" flat @click="onclickSave"/>
+    </div>
+
     <!-- 템플릿 선택 dialog -->
     <q-dialog v-model="templateChoice">
       <q-card class="meeting-log__dialog" style="max-width: 100vw;">
@@ -92,6 +96,13 @@ export default {
     this.selectTemplate();
   },
   methods: {
+    onclickSave() {
+      // dispatch해서 회의록 서버로 보내도록 한다.
+
+      // 현재 토큰, 또는 id값 따위로 다시 dashboard로 넘어간다.
+      
+      this.$router.push("/Dashboard?id=mansbuy13579");
+    },
     initSummernote() {
       $("#summernote").summernote({
         height: 300, // set editor height
