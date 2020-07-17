@@ -89,7 +89,7 @@
         <span>개발중 입니다.</span>
       </div>
       <div v-else-if="title == '파레토 차트'">
-        <span>개발중 입니다.</span>
+        <pareto-chart></pareto-chart>
       </div>
       <!-- 3-1 Logic Tree -->
       <div v-else-if="title == 'Logic Tree'">
@@ -130,7 +130,9 @@
         </div>
         <div class="asis-tobe__keyword">
           <div class="card-title">
+            <q-icon name="trending_flat" style="font-size: 32px;" />
             <span>Keyword</span>
+            <q-icon name="trending_flat" style="font-size: 32px;" />
           </div>
           <div class="card-contents">
             <div class="card-contents__input">
@@ -190,6 +192,7 @@
 import { T } from "../store/module/types.js";
 import { mapGetters } from "vuex";
 import LogicTree from "../components/ToolLogicTree";
+import ParetoChart from "../components/ParetoChart";
 
 export default {
   computed: {
@@ -198,7 +201,8 @@ export default {
     })
   },
   components: {
-    LogicTree
+    LogicTree,
+    ParetoChart
   },
   data() {
     return {
@@ -576,10 +580,14 @@ export default {
         .card-title {
           display: flex;
           justify-content: center;
+          align-items: center;
           margin-bottom: 10px;
           span {
             font-size: 16px;
             font-weight: bold;
+          }
+          i {
+            margin: 0 40px;
           }
         }
 

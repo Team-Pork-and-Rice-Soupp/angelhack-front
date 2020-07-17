@@ -2,8 +2,8 @@
   <div class="pareto-chart">
     <div>
       <div v-if="!tableEnabled">
-        <q-input label="비교 항목" v-model="scaleOption.xScaleLabel" />
-        <q-input label="데이터 단위" v-model="scaleOption.yScaleLabel" />
+        <q-input filled label="비교 항목" v-model="scaleOption.xScaleLabel" />
+        <q-input filled label="데이터 단위" v-model="scaleOption.yScaleLabel" />
         <q-btn label="표 생성" @click="enableTable" />
       </div>
 
@@ -25,8 +25,8 @@
           </template>
 
         </q-table>
-        <q-input v-model="newData.item" :label="scaleOption.xScaleLabel" />
-        <q-input v-model="newData.quantity" type="number" :label="scaleOption.yScaleLabel" />
+        <q-input filled v-model="newData.item" :label="scaleOption.xScaleLabel" />
+        <q-input filled v-model="newData.quantity" type="number" :label="scaleOption.yScaleLabel" />
         <q-btn label="데이터 추가" @click="addNewRow" />
       </div>
     </div>

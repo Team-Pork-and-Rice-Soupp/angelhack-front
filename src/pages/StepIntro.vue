@@ -51,11 +51,6 @@ export default {
               query: "1-1"
             },
             {
-              name: "브레인 스토밍",
-              description: "도구 설명",
-              query: "1-2"
-            },
-            {
               name: "PEST 분석",
               description: "도구 설명",
               query: "1-3"
@@ -70,11 +65,6 @@ export default {
               name: "5whys",
               description: "도구 설명",
               query: "2-1"
-            },
-            {
-              name: "원인 결과 도표",
-              description: "도구 설명",
-              query: "2-2"
             },
             {
               name: "파레토 차트",
@@ -112,11 +102,6 @@ export default {
               name: "ASIS-TOBE",
               description: "도구 설명",
               query: "5-1"
-            },
-            {
-              name: "Time Line",
-              description: "도구 설명",
-              query: "5-2"
             },
             {
               name: "축약해서 설명하기",
