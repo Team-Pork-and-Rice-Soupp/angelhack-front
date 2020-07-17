@@ -16,7 +16,13 @@
 
     <!-- 멤버 카드들 -->
     <div class="member-cards">
-      <add-member-card v-for="(member, index) in members" :key="index" :memberInfo="member" />
+      <add-member-card v-for="(member, index) in members" :key="index" :memberInfo="member">
+        <template v-slot:input>
+          <q-input filled label="설명" v-model="member.description" style="margin-bottom:10px;" />
+
+          <q-input filled label="역할" v-model="member.role" />
+        </template>
+      </add-member-card>
     </div>
 
     <!-- Dialog -->
@@ -179,7 +185,8 @@ export default {
       this.members.push({
         email: userInfo.email,
         description: "테스트입니다.",
-        role: "MANAGER"
+        role: "MANAGER",
+        isMe: true
       });
     }
   }

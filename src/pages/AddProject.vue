@@ -45,6 +45,7 @@ export default {
         alert("워크스페이스의 설명을 입력해주세요.");
       } else {
         let vue = this;
+
         this.$store.dispatch(T.ADD_WORKSPACE, {
           token: localStorage.getItem("token"),
           addWorkspaceInfo,

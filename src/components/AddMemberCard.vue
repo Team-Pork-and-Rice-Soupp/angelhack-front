@@ -6,23 +6,13 @@
     </div>
 
     <div class="member-description">
-      <q-input label="설명" v-model="memberDescription" />
-      <q-input label="역할" v-model="memberRole" />
+      <slot name="input"></slot>
     </div>
 
     <q-card-actions>
-      <q-btn label="삭제" @click="onClickDelete" flat />
+      <q-btn label="삭제" @click="onClickDelete" flat v-if="!this.memberInfo.isMe" />
     </q-card-actions>
   </q-card>
-  <!-- <div class="add-member-card">
-    <div class="member-info">
-      <span>이름</span>
-      <span>이메일</span>
-    </div>
-    <q-input label="설명" v-model="memberDescription" />
-    <q-input label="역할" v-model="memberRole" />
-    <q-btn label="삭제" @click="onClickDelete" flat />
-  </div>-->
 </template>
 
 <script>
