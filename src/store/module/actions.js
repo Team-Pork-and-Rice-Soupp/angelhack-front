@@ -69,6 +69,15 @@ export const actions = {
     [T.LOGOUT]({ commit }, params) {
         console.log(params);
     },
+    [T.LOGIN_CHECK]({ commit }, params) {
+        let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+        if (userInfo) {
+            commit(T.CHANGE_USER_INFO, userInfo);
+        } else {
+            params.goBack();
+            alert("다시 로그인 해주세요.")
+        }
+    },
 
 
     [T.ADD_WORKSPACE]({ commit }, params) {
@@ -78,6 +87,7 @@ export const actions = {
             }
         };
         let api = axios.create();
+        console.log(params.addWorkspaceInfo)
 
         axios
             .all([
@@ -88,12 +98,18 @@ export const actions = {
                 })
             ])
             .then(responses => {
-                console.log(responses);
+                let errors = responses.filter(res => {
+                    return res.status !== 201;
+                });
+                if (errors.length < 1) {
+                    params.cb();
+                }
 
             })
             .catch(error => {
-                params.cErr(error.response);
+                params.cErr();
             });
+
 
     },
     [T.DELETE_WORKSPACE]({ commit }, params) {
@@ -143,6 +159,37 @@ export const actions = {
                     return res.status !== 200;
                 });
                 if (errors.length < 1) {
+                    console.log(responses[0].data)
+                    params.cb(responses[0].data);
+                }
+            })
+            .catch(error => {
+                params.cErr(error);
+            });
+    },
+    [T.GET_WORKSPACE_DETAIL]({ commit }, params) {
+        let options = {
+            url() {
+                return `${apiURL}/api/workspace/` + params.workspaceId;
+            }
+        };
+        let api = axios.create();
+        console.log(params.token)
+
+        axios
+            .all([
+                api.get(options.url(), {
+                    headers: {
+                        auth: params.token
+                    }
+                })
+            ])
+            .then(responses => {
+                console.log(responses);
+                let errors = responses.filter(res => {
+                    return res.status !== 200;
+                });
+                if (errors.length < 1) {
                     params.cb(responses[0].data);
                 }
                 console.log(responses);
@@ -152,32 +199,6 @@ export const actions = {
                 params.cErr(error);
             });
     },
-    [T.GET_WORKSPACE_DETAIL]({ commit }, params) {
-        console.log(params.id);
-        let options = {
-            url() {
-                return `${apiURL}/api/workspace/` + params.workspaceId;
-            }
-        };
-        let api = axios.create();
-        /*
-                axios
-                    .all([
-                        api.get(options.url(), {
-                            email: params.email,
-                            password: params.password
-                        })
-                    ])
-                    .then(responses => {
-                        console.log(responses);
-                        if (params.cb) params.cb();
-                    })
-                    .catch(error => {
-                        cErr(error.response);
-                    });
-        */
-        if (params.cb) params.cb("test");
-    },
     [T.SEARCH_USER]({ commit }, params) {
         let options = {
             url() {
@@ -186,14 +207,13 @@ export const actions = {
         };
         let api = axios.create();
 
-
+        console.log(params.token)
         axios
             .all([
-                api.post(options.url(), params.addWorkspaceInfo, {
+                api.get(options.url(), {
                     params: {
                         keyword: params.keyword
-                    }
-                }, {
+                    },
                     headers: {
                         auth: params.token
                     }
@@ -201,6 +221,12 @@ export const actions = {
             ])
             .then(responses => {
                 console.log(responses);
+                let errors = responses.filter(res => {
+                    return res.status !== 200;
+                });
+                if (errors.length < 1) {
+                    params.cb(responses[0].data);
+                }
 
             })
             .catch(error => {

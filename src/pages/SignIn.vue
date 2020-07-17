@@ -50,11 +50,13 @@ export default {
             email: this.email,
             password: this.password,
             cb: res => {
-              vue.$store.dispatch(T.CHANGE_USER_INFO, {
+              let userInfo = {
                 email: res.email,
                 name: res.name
-              });
+              };
+              vue.$store.dispatch(T.CHANGE_USER_INFO, userInfo);
               localStorage.setItem("token", res.token);
+              sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
               vue.movePage("/ProjectList");
             },
             cErr: err => {

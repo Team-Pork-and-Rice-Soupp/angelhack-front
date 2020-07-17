@@ -203,6 +203,12 @@ export default {
     };
   },
   mounted() {
+    this.$store.dispatch(T.LOGIN_CHECK, {
+      goBack: () => {
+        this.$router.push("/");
+      }
+    });
+
     const id = this.$route.query.id;
     if (id) {
       this.getWorkspace(id);

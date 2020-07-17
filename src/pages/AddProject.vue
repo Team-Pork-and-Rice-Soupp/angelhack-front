@@ -19,7 +19,13 @@ export default {
   components: {
     AddWorkspace
   },
-  mounted() {},
+  mounted() {
+    this.$store.dispatch(T.LOGIN_CHECK, {
+      goBack: () => {
+        this.$router.push("/");
+      }
+    });
+  },
   methods: {
     movePage(pageName) {
       this.$router.push(`${pageName}`);

@@ -7,6 +7,7 @@ export const T = {
   SIGN_IN: "SIGN_IN",
   SIGN_UP: "SIGN_UP",
   LOGOUT: "LOGOUT",
+  LOGIN_CHECK: "LOGIN_CHECK",
 
 
   ADD_WORKSPACE: "ADD_WORKSPACE",

@@ -18,28 +18,19 @@ import WorkspaceCard from "../components/WorkspaceCard";
 export default {
   data() {
     return {
-      projects: [
-        {
-          id: 3,
-          title: "운영체제",
-          description: "유닉스 컴파일 후 나만의 운영체제 개발하기",
-          createDate: "2020-07-17T19:52:27",
-          updateDate: "2020-07-17T19:52:27"
-        },
-        {
-          id: 3,
-          title: "운영체제",
-          description: "유닉스 컴파일 후 나만의 운영체제 개발하기",
-          createDate: "2020-07-17T19:52:27",
-          updateDate: "2020-07-17T19:52:27"
-        }
-      ]
+      projects: []
     };
   },
   components: {
     WorkspaceCard
   },
   mounted() {
+    this.$store.dispatch(T.LOGIN_CHECK, {
+      goBack: () => {
+        this.$router.push("/");
+      }
+    });
+
     this.$store.dispatch(T.CHANGE_TOP_STYLE, "");
 
     const token = localStorage.getItem("token");
@@ -50,6 +41,7 @@ export default {
       this.$router.push(`${pageName}`);
     },
     getProjects(token) {
+      let vue = this;
       this.$store.dispatch(T.GET_PROJECTS, {
         token,
         cb: res => {
