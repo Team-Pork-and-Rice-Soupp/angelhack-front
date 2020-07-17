@@ -1,3 +1,30 @@
+<!--
+  서버로 보내고 받는 데이터:
+  this.data ===
+  {
+    { number: 1, item: "전자레인지", quantity: 85 },
+    { number: 2, item: "선풍기", quantity: 32 },
+    { number: 3, item: "전등 스위치", quantity: 4 },
+    ...    
+  }
+
+  이 컴포넌트(this)가 보내고 받을 데이터를 담고 있는 놈 : 
+  data
+  -> 나중에 dispatch(T.~, this.data) 이렇게 보내면 됨.
+     받을 땐 
+      this.data = 받은 데이터;
+      this.generateParetoChart(this.data);
+     하면 된다.
+
+  표 그리는 방법:
+  서버에서 받은 데이터를 this.data에 넣으면 됨.
+
+  파레토차트 그리는 방법:
+  this.generateParetoChart(서버에서 받은 데이터); 이렇게 하면 됨.
+  this.data = 서버에서 받은 데이터; 를 했다면,
+  위의 함수의 파라미터에 this.data 넣으면 됨.
+-->
+
 <template>
   <div class="pareto-chart">
     <div>
@@ -84,33 +111,7 @@ export default {
           field: "deleteButton"
         }
       ],
-      data: [
-        // {
-        //     name: "1",
-        //     product: "A 제품",
-        //     sale: 6.0
-        // },
-        // {
-        //     name: "2",
-        //     product: "B 제품",
-        //     sale: 9.0
-        // },
-        // {
-        //     name: "3",
-        //     product: "C 제품",
-        //     sale: 16.0
-        // },
-        // {
-        //     name: "4",
-        //     product: "D 제품",
-        //     sale: 3
-        // },
-        // {
-        //     name: "5",
-        //     product: "E 제품",
-        //     sale: 16.0
-        // }
-      ],
+      data: [],
       datacollection: {
         labels: [],
         datasets: [
@@ -214,16 +215,6 @@ export default {
       // },
     };
   },
-  // computed: {
-  //     realtimeData() {
-  //         this.data.forEach(datum => {
-  //             this.datacollection.labels.push(datum.product);
-  //             this.datacollection.datasets[1].data.push(datum.sale);
-  //         });
-  //         return this.datacollection;
-  //         // this.datacollection.labels = this.data
-  //     }
-  // },
   methods: {
     deleteRow(row) {
       let index = this.data.findIndex(datum => datum.number == row.number);
@@ -262,8 +253,11 @@ export default {
     addNewRow() {
       this.newData.number = this.data.length + 1;
       this.data.push(this.newData);
-
-      let tempList = [...this.data];
+      this.generateParetoChart(this.data);
+    },
+    generateParetoChart(dataList) {
+      // dataList consists of objects that has 1) number, 2) item, 3) quantity
+      let tempList = [...dataList];
       tempList.sort((a, b) => {
         // desc sort
         if (parseInt(a.quantity) > parseInt(b.quantity)) return -1;
