@@ -27,7 +27,12 @@
           <q-card-section>
             <q-scroll-area :thumb-style="thumbStyle" :bar-style="barStyle" class="scroll-area">
               <ul class="result-list">
-                <li class="result" :class="result.selected? 'is-selected' : ''" v-for="(result, index) in searchResults" :key="index">
+                <li
+                  class="result"
+                  :class="result.selected? 'is-selected' : ''"
+                  v-for="(result, index) in searchResults"
+                  :key="index"
+                >
                   <div class="result__info">
                     <div>{{ result.name }}</div>
                     <div>{{ result.email }}</div>
@@ -52,7 +57,7 @@
           </q-card-section>
 
           <q-card-actions>
-            <q-btn label="Confirm" flat color="primary" @click="onclickConfirm"/>
+            <q-btn label="Confirm" flat color="primary" @click="onclickConfirm" />
             <q-btn label="Cancel" flat color="negative" v-close-popup />
           </q-card-actions>
         </q-card>
@@ -62,6 +67,7 @@
 </template>
 
 <script>
+import { T } from "../store/module/types.js";
 import AddMemberCard from "./AddMemberCard.vue";
 
 export default {
@@ -80,12 +86,13 @@ export default {
   },
   data() {
     return {
+      vueName: "addWorkspace",
       title: "",
       description: "",
       members: [],
       myself: {
         name: `Moon Juhan`, // layout 우측상단의 이름... 아마 vuex에서 들고있는건가? 그거 접근해서 하면 될듯
-        email: `MJ@mail.com`,
+        email: `MJ@mail.com`
       },
       keyword: "",
       dialogOpened: false,
@@ -123,20 +130,36 @@ export default {
         });
     },
     searchMember() {
-      console.log(this.keyword);
-      this.dialogOpened = true;
+      if (this.keyword == "") {
+        alert("검색어를 입력해주세요.");
+      } else {
+        this.$store.dispatch(T.SEARCH_USER, {
+          keyword: this.keyword,
+          token: localStorage.getItem("token"),
+          cb: res => {
+            console.log(res);
+            this.dialogOpened = true;
+          },
+          cErr: err => {
+            console.log(err);
+            alert("오류가 발생하였습니다.");
+          }
+        });
+      }
     },
     onResultClick(result) {
-      if(result.selected) {
-        const index = this.selectedMembers.findIndex(selected => selected.email == result.email);
-        if(index !== -1) {
+      if (result.selected) {
+        const index = this.selectedMembers.findIndex(
+          selected => selected.email == result.email
+        );
+        if (index !== -1) {
           this.selectedMembers.splice(index, 1);
           result.selected = false;
         }
       } else {
         this.selectedMembers.push(result);
-        result.selected = true;        
-      }      
+        result.selected = true;
+      }
       console.log("this.selectedMembers >> ", this.selectedMembers);
     }
   }
@@ -180,6 +203,6 @@ export default {
   }
 }
 .is-selected {
-  background-color: #C3E9FF;
+  background-color: #c3e9ff;
 }
 </style>

@@ -1,9 +1,10 @@
 <template>
   <div class="project-list">
-    <workspace-card :workspaceId="item.Id" v-for="(item, index) in projects" :key="index">
+    <workspace-card :workspaceId="item.id" v-for="(item, index) in projects" :key="index">
       <template v-slot:card-title>{{item.title}}</template>
       <template v-slot:card-description>{{item.description}}</template>
     </workspace-card>
+
     <workspace-card :addButton="true">
       <template v-slot:add-card>new+</template>
     </workspace-card>
@@ -19,14 +20,18 @@ export default {
     return {
       projects: [
         {
-          title: "test1",
-          description: "설명입니다.",
-          Id: "q1w2e3r4"
+          id: 3,
+          title: "운영체제",
+          description: "유닉스 컴파일 후 나만의 운영체제 개발하기",
+          createDate: "2020-07-17T19:52:27",
+          updateDate: "2020-07-17T19:52:27"
         },
         {
-          title: "test2",
-          description: "설명입니다.",
-          Id: "mansbuy13579"
+          id: 3,
+          title: "운영체제",
+          description: "유닉스 컴파일 후 나만의 운영체제 개발하기",
+          createDate: "2020-07-17T19:52:27",
+          updateDate: "2020-07-17T19:52:27"
         }
       ]
     };
@@ -37,22 +42,24 @@ export default {
   mounted() {
     this.$store.dispatch(T.CHANGE_TOP_STYLE, "");
 
-    this.getProjects();
+    const token = localStorage.getItem("token");
+    this.getProjects(token);
   },
   methods: {
     movePage(pageName) {
       this.$router.push(`${pageName}`);
     },
-    getProjects() {
+    getProjects(token) {
       this.$store.dispatch(T.GET_PROJECTS, {
-        userId: "",
-        cb: () => {
-          console.log("GET_PROJECTS");
+        token,
+        cb: res => {
+          console.log(res);
+          vue.projects = res;
+        },
+        cErr: err => {
+          console.log(err);
         }
       });
-    },
-    action1() {
-      console.log("action1");
     },
     addProject() {
       this.movePage("/AddProject");
