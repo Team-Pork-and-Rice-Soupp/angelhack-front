@@ -5,7 +5,6 @@
         <q-card-section>
           <div class="text-h4">{{title}}</div>
           <div class="text-subtitle1">{{description}}</div>
-          <q-btn label="Edit" @click="movePage('/EditWorkspace')" />
           <q-btn label="Close" @click="onClickClose" />
         </q-card-section>
       </q-card>
@@ -229,6 +228,7 @@ export default {
     },
     getWorkspace(id) {
       if (id) {
+        let vue = this;
         console.log(id);
         this.$store.dispatch(T.CHANGE_WORKSPACE_ID, id);
         this.$store.dispatch(T.GET_WORKSPACE_DETAIL, {
@@ -236,6 +236,10 @@ export default {
           token: localStorage.getItem("token"),
           cb: res => {
             console.log(res);
+            vue.title = res.title;
+            vue.description = res.description;
+            vue.members = res.members;
+            //vue.setToos(res.tools);
           },
           cErr: err => {
             console.log(err);
@@ -245,6 +249,9 @@ export default {
         alert("잘못된 접근입니다.");
         this.movePage("/ProjectList");
       }
+    },
+    setToos(tools) {
+      console.log(tools);
     },
     addStep(type) {
       switch (type) {

@@ -174,8 +174,6 @@ export const actions = {
             }
         };
         let api = axios.create();
-        console.log(params.token)
-
         axios
             .all([
                 api.get(options.url(), {
@@ -192,8 +190,6 @@ export const actions = {
                 if (errors.length < 1) {
                     params.cb(responses[0].data);
                 }
-                console.log(responses);
-                if (params.cb) params.cb();
             })
             .catch(error => {
                 params.cErr(error);
