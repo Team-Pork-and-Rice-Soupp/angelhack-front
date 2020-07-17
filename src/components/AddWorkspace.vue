@@ -3,7 +3,7 @@
     <!-- 타이틀, 설명, 멤버 검색창 등 인풋 묶음 -->
     <div class="inputs">
       <q-input v-model="title" label="title" />
-      <q-input v-model="description" label="description" autogrow />
+      <q-input v-model="description" label="description" />
 
       <q-form class="search-form" @submit="searchMember">
         <q-input ref="keyword" v-model="keyword" placeholder="검색어를 입력해주세요." />
@@ -132,16 +132,42 @@ export default {
   },
   methods: {
     onclickConfirm() {
-      this.members.push.apply(this.members, this.selectedMembers);
-      this.dialogOpened = false;
-    },
-    addingMember() {
-      this.$children
-        .find(el => el.vueName == "add-members")
-        .addMember(res => {
-          this.members.push(res);
+      console.log("this.members >> ", this.members);
+      console.log("this.selectedMembers >> ", this.selectedMembers);
+
+      
+      // 1. 이미 있는지 비교
+      let flag = true;
+      this.selectedMembers.forEach((selMember, sIndex) => {
+        this.members.forEach((member, mIndex) => {
+          if(member.email == selMember.email) {
+            this.selectedMembers.splice(sIndex, 1);
+            flag = false;
+          }
         });
+      });
+
+      console.log("stage 1 passed!")
+      console.log("this.members >> ", this.members);
+      console.log("this.selectedMembers >> ", this.selectedMembers);
+
+      // 2. this.members에 삽입
+      this.selectedMembers.forEach(selMember => {
+        this.members.push(selMember);
+      });
+
+      // 3. 이미 있는 놈을 리스트에 추가하려 했다면, 추가 후 alert해줘라
+      if(!flag) {
+        alert('이미 추가된 인물입니다.');
+      }
     },
+    // addingMember() {
+    //   this.$children
+    //     .find(el => el.vueName == "add-members")
+    //     .addMember(res => {
+    //       this.members.push(res);
+    //     });
+    // },
     searchMember() {
       if (this.keyword == "") {
         alert("검색어를 입력해주세요.");
@@ -151,7 +177,10 @@ export default {
           keyword: this.keyword,
           token: localStorage.getItem("token"),
           cb: res => {
-            console.log(res);
+            console.log("search results >> ", res);
+            res.forEach(result => {
+              result.selected = false;
+            })
             if (res.length > 0) {
               vue.searchResults = res;
               vue.dialogOpened = true;
@@ -214,7 +243,7 @@ export default {
   width: 800px;
 
   .scroll-area {
-    height: 800px;
+    height: 50vh;
 
     .result-list {
       list-style-type: none;
