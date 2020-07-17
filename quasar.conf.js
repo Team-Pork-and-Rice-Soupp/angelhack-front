@@ -70,6 +70,7 @@ module.exports = function (/* ctx */) {
     devServer: {
       https: false,
       port: 8080,
+      host: "192.168.0.7",
       open: true // opens browser window automatically
     },
 

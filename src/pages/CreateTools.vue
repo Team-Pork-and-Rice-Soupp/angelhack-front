@@ -168,7 +168,7 @@
         </div>
       </div>
       <div v-else-if="title == 'Time Line'">
-        <span>개발중 입니다.</span>
+        <time-line></time-line>
       </div>
       <div v-else-if="title == '축약해서 설명하기'">
         <span>개발중 입니다.</span>
@@ -192,6 +192,7 @@
 import { T } from "../store/module/types.js";
 import { mapGetters } from "vuex";
 import LogicTree from "../components/ToolLogicTree";
+import TimeLine from "../components/ToolTimeLine";
 import ParetoChart from "../components/ParetoChart";
 
 export default {
@@ -202,7 +203,8 @@ export default {
   },
   components: {
     LogicTree,
-    ParetoChart
+    ParetoChart,
+    TimeLine
   },
   data() {
     return {
@@ -374,9 +376,6 @@ export default {
               break;
           }
           break;
-
-        default:
-          break;
       }
 
       console.log(tool);
@@ -387,7 +386,74 @@ export default {
     onClickExit() {
       this.movePage("/Dashboard?id=" + this.workspaceId);
     },
-    onClickSave() {},
+    onClickSave() {
+      let toolData = {
+        workSpaceId: this.workspaceId
+      };
+      const tool = {
+        first: this.$route.query.type.split("-")[0],
+        second: this.$route.query.type.split("-")[1]
+      };
+
+      switch (tool.first) {
+        case "1":
+          switch (tool.second) {
+            case "1":
+              toolData.toolName = "swot";
+              toolData.contents = JSON.stringify(this.swot);
+              break;
+            case "3":
+              toolData.toolName = "pest";
+              toolData.contents = JSON.stringify(this.pest);
+              break;
+          }
+          break;
+        case "2":
+          switch (tool.second) {
+            case "1":
+              toolData.toolName = "fiveWhys";
+              toolData.contents = JSON.stringify(this.fiveWhys);
+              break;
+            case "3":
+              toolData.toolName = "paretoChart";
+              toolData.contents = JSON.stringify();
+              break;
+          }
+          break;
+        case "3":
+          switch (tool.second) {
+            case "1":
+              toolData.toolName = "logicTree";
+              toolData.contents = JSON.stringify(
+                this.$children.find(v => v.vueName == "logicTree").logicTree
+              );
+              break;
+            case "2":
+              toolData.toolName = "fiveWOneH";
+              toolData.contents = JSON.stringify(this.fiveWOneH);
+              break;
+          }
+          break;
+        case "4":
+          toolData.toolName = "thinkIdea";
+          toolData.contents = JSON.stringify();
+          break;
+        case "5":
+          switch (tool.second) {
+            case "1":
+              toolData.toolName = "asisTobe";
+              toolData.contents = JSON.stringify(this.asisTobe);
+              break;
+            case "2":
+              toolData.toolName = "timeLine";
+              toolData.contents = JSON.stringify();
+              break;
+          }
+          break;
+      }
+
+      console.log(toolData);
+    },
     onClickPlusSwot(type) {
       let preData = this.swot.data[type][this.swot.data[type].length - 1];
       if (preData) {

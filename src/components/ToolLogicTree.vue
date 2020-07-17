@@ -64,6 +64,7 @@
 export default {
   data() {
     return {
+      vueName: "logicTree",
       dialogOpened: false,
       dialogData: {},
       dialogInput: "",
@@ -74,8 +75,7 @@ export default {
           node: []
         }
       ],
-      svgList: [],
-      updateCheck: false
+      svgList: []
     };
   },
   methods: {

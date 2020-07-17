@@ -3,15 +3,15 @@
   <div class="step-intro">
     <q-card dark bordered class="bg-grey-4 my-card">
       <q-card-section>
-        <div class="text-h3">{{title}}</div>
-        <div class="text-subtitle1">{{description}}</div>
+        <div class="step-title">{{title}}</div>
+        <div class="step-description">{{description}}</div>
       </q-card-section>
     </q-card>
 
     <q-card dark bordered class="bg-grey-4 my-card" v-for="(item, index) in contents" :key="index">
       <q-card-section>
-        <div class="text-h3">{{item.name}}</div>
-        <div class="text-subtitle1">{{item.description}}</div>
+        <div class="step-title">{{item.name}}</div>
+        <div class="step-description">{{item.description}}</div>
         <q-btn label="Create" @click="onClick(item)" />
       </q-card-section>
     </q-card>
@@ -104,9 +104,9 @@ export default {
               query: "5-1"
             },
             {
-              name: "축약해서 설명하기",
+              name: "TimeLine",
               description: "도구 설명",
-              query: "5-3"
+              query: "5-2"
             }
           ];
           break;
@@ -131,9 +131,12 @@ export default {
     margin-bottom: 20px;
     width: 80%;
     color: black;
-    .text-h3 {
-      font-size: 2.8rem;
+    .step-title {
+      font-size: 30px;
       font-weight: lighter;
+      margin-bottom: 10px;
+    }
+    .step-description {
       margin-bottom: 10px;
     }
   }
