@@ -2,6 +2,10 @@ export default function () {
   return {
     topStyle: "",
     overlayLoading: false,
-    workspaceId: ""
+    workspaceId: "",
+    userInfo: {
+      email: "",
+      name: ""
+    }
   }
 }

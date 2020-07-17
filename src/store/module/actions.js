@@ -8,12 +8,15 @@ export const actions = {
     [T.CHANGE_TOP_STYLE]({ commit }, style) {
         commit(T.CHANGE_TOP_STYLE, style);
     },
+    [T.CHANGE_USER_INFO]({ commit }, params) {
+        commit(T.CHANGE_USER_INFO, params);
+    },
 
     // 회원 관련
     [T.SIGN_IN]({ commit }, params) {
         let options = {
             url() {
-                return `${apiURL}/api/login`;
+                return `${apiURL}/auth/login`;
             }
         };
         let api = axios.create();
@@ -22,42 +25,46 @@ export const actions = {
             .all([
                 api.post(options.url(), {
                     email: params.email,
-                    password: params.password
+                    pw: params.password
                 })
             ])
             .then(responses => {
                 console.log(responses);
-                if (params.cb) params.cb();
+                let errors = responses.filter(res => {
+                    return res.status !== 200;
+                });
+                if (errors.length < 1) {
+                    params.cb(responses[0].data);
+                }
             })
             .catch(error => {
-                cErr(error.response);
+                params.cErr(error);
             });
     },
     [T.SIGN_UP]({ commit }, params) {
         console.log(params);
         let options = {
             url() {
-                return `${apiURL}/api/signup`;
+                return `${apiURL}/auth/signup`;
             }
         };
         let api = axios.create();
-        /*
-                axios
-                    .all([
-                        api.post(options.url(), {
-                            email: params.email,
-                            password: params.password
-                        })
-                    ])
-                    .then(responses => {
-                        console.log(responses);
-                        if (params.cb) params.cb();
-                    })
-                    .catch(error => {
-                        cErr(error.response);
-                    });
-        */
-        if (params.cb) params.cb();
+
+        axios
+            .all([
+                api.post(options.url(), {
+                    email: params.email,
+                    name: params.name,
+                    pw: params.password
+                })
+            ])
+            .then(responses => {
+                if (params.cb) params.cb();
+            })
+            .catch(error => {
+                params.cErr();
+            });
+
     },
     [T.LOGOUT]({ commit }, params) {
         console.log(params);

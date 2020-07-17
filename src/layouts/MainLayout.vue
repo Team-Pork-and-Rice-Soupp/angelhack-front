@@ -2,7 +2,7 @@
   <div class="mylayout">
     <div class="mylayout__top" :class="topStyle">
       <div class="title">Title</div>
-      <div>Moon Juhan</div>
+      <div>{{userInfo.name}}</div>
     </div>
 
     <div class="mylayout__contents">
@@ -22,7 +22,8 @@ export default {
   name: "MainLayout",
   computed: {
     ...mapGetters({
-      topStyle: "getTopStyle"
+      topStyle: "getTopStyle",
+      userInfo: "getUserInfo"
     })
   },
   data() {

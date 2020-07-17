@@ -1,6 +1,7 @@
 export const T = {
   // 시스템 관련
   CHANGE_TOP_STYLE: "CHANGE_TOP_STYLE",
+  CHANGE_USER_INFO: "CHANGE_USER_INFO",
 
   // 회원 관련
   SIGN_IN: "SIGN_IN",

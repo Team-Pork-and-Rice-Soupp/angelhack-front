@@ -49,9 +49,16 @@ export default {
           this.$store.dispatch(T.SIGN_IN, {
             email: this.email,
             password: this.password,
-            cb: () => {
-              console.log("Sign In");
+            cb: res => {
+              vue.$store.dispatch(T.CHANGE_USER_INFO, {
+                email: res.email,
+                name: res.name
+              });
+              localStorage.setItem("token", res.token);
               vue.movePage("/ProjectList");
+            },
+            cErr: err => {
+              alert("로그인에 문제가 발생하였습니다.");
             }
           });
         }
@@ -72,11 +79,14 @@ export default {
             password: this.password,
             name: this.name,
             cb: () => {
-              console.log("Sign Up");
               vue.email = "";
               vue.password = "";
               vue.name = "";
               vue.signUpOpened = false;
+              alert("회원가입이 성공적으로 되었습니다.");
+            },
+            cErr: () => {
+              alert("회원가입에 문제가 발생하였습니다.");
             }
           });
         }
