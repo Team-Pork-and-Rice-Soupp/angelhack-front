@@ -90,10 +90,7 @@
     <!-- 회의록 템플릿 선택 Dialog -->
     <q-dialog v-model="logTemplateDialog">
       <q-card class="meeting-log__dialog" style="max-width: 100vw;">
-
         <q-card-section horizontal class="card-container">
-
-
           <q-card-section>
             <q-card class="card-container__card" @click="selectTemplate(templates.template1)">
               <div v-html="templates.template1"></div>
@@ -111,16 +108,12 @@
               <div v-html="templates.template3"></div>
             </q-card>
           </q-card-section>
-          
-          
         </q-card-section>
-
 
         <q-card-section class="card-container__foot">
           <span>회의록 템플릿을 선택하세요. (템플릿을 다시 설정하면 이전에 작성된 글은 저장되지 않고 지워집니다.)</span>
           <q-btn label="템플릿 없이 시작하기" color="dark" flat @click="selectTemplate(null)" />
         </q-card-section>
-
       </q-card>
     </q-dialog>
   </div>
@@ -142,9 +135,8 @@ export default {
     seeResult() {
       return {
         "result-button": this.dummy_data_from_server.isAllDone
-      }
+      };
     }
-
   },
   data() {
     return {
@@ -218,12 +210,15 @@ export default {
   },
   methods: {
     showContribution() {
-      if(this.dummy_data_from_server.isAllDone) {
+      if (this.dummy_data_from_server.isAllDone) {
         this.$router.push("/ContributionStat");
       }
     },
     selectTemplate(template) {
-      this.$router.push({name:"AddMeetingLog", params:{"template": template}});
+      this.$router.push({
+        name: "AddMeetingLog",
+        params: { template: template }
+      });
       this.logTemplateDialog = false;
     },
     createMeetingLog() {
@@ -237,9 +232,13 @@ export default {
         console.log(id);
         this.$store.dispatch(T.CHANGE_WORKSPACE_ID, id);
         this.$store.dispatch(T.GET_WORKSPACE_DETAIL, {
-          id,
+          workspaceId: id,
+          token: localStorage.getItem("token"),
           cb: res => {
             console.log(res);
+          },
+          cErr: err => {
+            console.log(err);
           }
         });
       } else {
@@ -370,7 +369,7 @@ export default {
       width: 59%;
     }
     &__contribution {
-      width: 39%;      
+      width: 39%;
     }
   }
 }

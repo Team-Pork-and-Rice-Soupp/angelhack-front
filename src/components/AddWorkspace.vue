@@ -16,7 +16,6 @@
 
     <!-- 멤버 카드들 -->
     <div class="member-cards">
-      <add-member-card :memberInfo="myself" />
       <add-member-card v-for="(member, index) in members" :key="index" :memberInfo="member" />
     </div>
 
@@ -68,12 +67,18 @@
 
 <script>
 import { T } from "../store/module/types.js";
+import { mapGetters } from "vuex";
 import AddMemberCard from "./AddMemberCard.vue";
 
 export default {
   name: "add-workspace",
   components: {
     AddMemberCard
+  },
+  computed: {
+    ...mapGetters({
+      userInfo: "getUserInfo"
+    })
   },
   created() {
     for (let i = 0; i < 20; i++) {
@@ -90,10 +95,6 @@ export default {
       title: "",
       description: "",
       members: [],
-      myself: {
-        name: `Moon Juhan`, // layout 우측상단의 이름... 아마 vuex에서 들고있는건가? 그거 접근해서 하면 될듯
-        email: `MJ@mail.com`
-      },
       keyword: "",
       dialogOpened: false,
 
@@ -117,6 +118,12 @@ export default {
       }
     };
   },
+  mounted() {
+    console.log(this.userInfo);
+    if (this.userInfo.email) {
+      this.setMyMember(this.userInfo);
+    }
+  },
   methods: {
     onclickConfirm() {
       this.members.push.apply(this.members, this.selectedMembers);
@@ -133,12 +140,18 @@ export default {
       if (this.keyword == "") {
         alert("검색어를 입력해주세요.");
       } else {
+        let vue = this;
         this.$store.dispatch(T.SEARCH_USER, {
           keyword: this.keyword,
           token: localStorage.getItem("token"),
           cb: res => {
             console.log(res);
-            this.dialogOpened = true;
+            if (res.length > 0) {
+              vue.searchResults = res;
+              vue.dialogOpened = true;
+            } else {
+              alert("검색된 유저가 없습니다.");
+            }
           },
           cErr: err => {
             console.log(err);
@@ -161,6 +174,13 @@ export default {
         result.selected = true;
       }
       console.log("this.selectedMembers >> ", this.selectedMembers);
+    },
+    setMyMember(userInfo) {
+      this.members.push({
+        email: userInfo.email,
+        description: "테스트입니다.",
+        role: "MANAGER"
+      });
     }
   }
 };

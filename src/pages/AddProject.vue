@@ -10,6 +10,7 @@
 
 <script>
 import { T } from "../store/module/types.js";
+import { mapGetters } from "vuex";
 import AddWorkspace from "../components/AddWorkspace.vue";
 
 export default {
@@ -37,17 +38,18 @@ export default {
           .description,
         members: this.$children.find(v => v.vueName == "addWorkspace").members
       };
-      console.log(addWorkspaceInfo);
+
       if (addWorkspaceInfo.title == "") {
         alert("워크스페이스의 제목을 입력해주세요.");
       } else if (addWorkspaceInfo.description == "") {
         alert("워크스페이스의 설명을 입력해주세요.");
       } else {
+        let vue = this;
         this.$store.dispatch(T.ADD_WORKSPACE, {
           token: localStorage.getItem("token"),
           addWorkspaceInfo,
           cb: () => {
-            vue.movePage("/ProjectInfo");
+            vue.movePage("/ProjectList");
             alert("워크스페이스가 생성되었습니다.");
           },
           cErr: () => {
