@@ -81,14 +81,20 @@ const routes = [
       { path: "", component: () => import('pages/EditWorkspace.vue') }
     ]
   },
-  {
+  { // test route.
     path: '/pareto-temp',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: "", component: () => import('components/ParetoChart.vue') }
     ]
   },
-
+  { // test route.
+    path: '/peer-assessment',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: "", component: () => import('components/PeerAssessment.vue') }
+    ]
+  },
   // Always leave this as last one,
   // but you can also remove it
   {
