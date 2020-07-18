@@ -18,15 +18,17 @@
     <div class="member-cards">
       <add-member-card v-for="(member, index) in members" :key="index" :memberInfo="member">
         <template v-slot:input>
-          <q-input filled label="설명" v-model="member.description" style="margin-bottom:10px;" />
-
-          <q-input filled label="역할" v-model="member.role" />
+          <q-input filled label="설명" v-model="member.description" style="margin-bottom:10px;" :disable="member.isMe" />
+          <q-input filled label="역할" v-model="member.role" :disable="member.isMe" />
+        </template>
+        <template v-slot:deleteBtn>
+          <q-btn label="삭제" @click="onClickDelete(member)" flat v-if="!member.isMe" />
         </template>
       </add-member-card>
     </div>
 
     <!-- Dialog -->
-    <q-dialog v-model="dialogOpened">
+    <q-dialog v-model="dialogOpened" @hide="selectedMembers = []">
       <div class="search-result-list-card">
         <q-card>
           <q-card-section>
@@ -131,35 +133,71 @@ export default {
     }
   },
   methods: {
+    refineMembers() {
+      let refinedMemberList = [];
+      this.members.forEach(member => {
+        refinedMemberList.push({
+          email: member.email,
+          description: member.description,
+          role: member.role
+        })
+      });
+      return refinedMemberList;
+    },
+    seeMembers() {
+      console.log("see this.members >> ", this.members);
+    },
+    onClickDelete(member) {
+      let index = this.members.findIndex(mem => mem.email == member.email);
+      this.members.splice(index, 1);
+      console.log("deleted! this.members >> ", this.members);
+    },
     onclickConfirm() {
       console.log("this.members >> ", this.members);
       console.log("this.selectedMembers >> ", this.selectedMembers);
 
       
       // 1. 이미 있는지 비교
-      let flag = true;
+      let flag, duplicate;
+      let filtered = [];
       this.selectedMembers.forEach((selMember, sIndex) => {
+        flag = true;
         this.members.forEach((member, mIndex) => {
           if(member.email == selMember.email) {
-            this.selectedMembers.splice(sIndex, 1);
             flag = false;
+            duplicate = true;
           }
+          // if(member.email != selMember.email) {
+          //   filtered.push(selMember);
+          // } else  {            
+          //   flag = false;
+          //   console.log("same one detected!");
+          // }
         });
+        if(flag) {
+          filtered.push(selMember);
+        }
       });
 
-      console.log("stage 1 passed!")
+      console.log("deletion in selectedMembers done!")
       console.log("this.members >> ", this.members);
-      console.log("this.selectedMembers >> ", this.selectedMembers);
+      console.log("filtered ones! >> ", filtered);
 
+      let pushed = false;
       // 2. this.members에 삽입
-      this.selectedMembers.forEach(selMember => {
+      filtered.forEach(selMember => {
         this.members.push(selMember);
+        pushed = true;
       });
 
       // 3. 이미 있는 놈을 리스트에 추가하려 했다면, 추가 후 alert해줘라
-      if(!flag) {
-        alert('이미 추가된 인물입니다.');
+      if(duplicate) {
+        alert('중복되는 인물은 추가되지 않습니다.');
       }
+      if(pushed) {
+        this.selectedMembers = [];
+        this.dialogOpened = false;
+      }      
     },
     // addingMember() {
     //   this.$children
@@ -196,6 +234,8 @@ export default {
       }
     },
     onResultClick(result) {
+      console.log("selected one >> ", result);
+      console.log("this.selectedMembers before splicing >> ", this.selectedMembers);
       if (result.selected) {
         const index = this.selectedMembers.findIndex(
           selected => selected.email == result.email
@@ -212,6 +252,7 @@ export default {
     },
     setMyMember(userInfo) {
       this.members.push({
+        name: userInfo.name,
         email: userInfo.email,
         description: "테스트입니다.",
         role: "MANAGER",

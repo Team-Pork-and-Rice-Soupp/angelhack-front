@@ -10,7 +10,8 @@
     </div>
 
     <q-card-actions>
-      <q-btn label="삭제" @click="onClickDelete" flat v-if="!this.memberInfo.isMe" />
+      <!-- <q-btn label="삭제" @click="onClickDelete" flat v-if="!this.memberInfo.isMe" /> -->
+      <slot name="deleteBtn"></slot>
     </q-card-actions>
   </q-card>
 </template>
@@ -29,9 +30,9 @@ export default {
     };
   },
   methods: {
-    onClickDelete() {
-      console.log("D");
-    }
+    // onClickDelete() {
+    //   console.log("D");
+    // }
   }
 };
 </script>
