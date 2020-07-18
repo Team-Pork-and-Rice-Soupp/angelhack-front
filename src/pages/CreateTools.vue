@@ -448,7 +448,9 @@ export default {
               break;
             case "2":
               toolData.toolName = "timeLine";
-              toolData.contents = JSON.stringify();
+              toolData.contents = JSON.stringify(
+                this.$children.find(v => v.vueName == "timeLine").timeLine
+              );
               break;
           }
           break;
