@@ -17,6 +17,7 @@
         </q-card-section>
       </q-card>
     </div>
+
     <div class="dashboard__mid">
       <q-card class="card__step">
         <div class="step-wrapper">
@@ -62,6 +63,7 @@
         </div>
       </q-card>
     </div>
+
     <div class="dashboard__bottom">
       <q-card class="card__meeting-log">
         <q-card-section>
@@ -121,8 +123,8 @@
 <script>
 import { T } from "../store/module/types.js";
 import { mapGetters } from "vuex";
-
 import StepFab from "../components/StepFAB";
+
 export default {
   components: {
     StepFab
@@ -130,27 +132,13 @@ export default {
   computed: {
     ...mapGetters({
       workspaceId: "getWorkspaceId"
-    }),
-    seeResult() {
-      return {
-        "result-button": this.dummy_data_from_server.isAllDone
-      };
-    }
+    })
   },
   data() {
     return {
-      title: "워크스페이스 제목",
-      description: "워크스페이스 설명",
-      members: [
-        {
-          email: "codemike@naver.com",
-          name: "문주한"
-        },
-        {
-          email: "codemike@gmail.com",
-          name: "이주한"
-        }
-      ],
+      title: "Title",
+      description: "Description",
+      members: [],
       stepData: [
         {
           locked: false,
@@ -309,6 +297,11 @@ export default {
     },
     onClickClose() {
       this.dialogOpened = true;
+    },
+    seeResult() {
+      return {
+        "result-button": this.dummy_data_from_server.isAllDone
+      };
     }
   }
 };

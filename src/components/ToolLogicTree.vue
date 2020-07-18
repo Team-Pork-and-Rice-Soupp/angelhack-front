@@ -19,9 +19,9 @@
     <svg>
       <line
         :x1="item.left - 10"
-        :y1="item.top - 140"
+        :y1="item.top - 160"
         :x2="item.preRight + 10"
-        :y2="item.preTop - 140"
+        :y2="item.preTop - 160"
         stroke="black"
         v-for="(item, index) in svgList"
         :key="index"

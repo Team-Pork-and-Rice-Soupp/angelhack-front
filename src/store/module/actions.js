@@ -241,6 +241,147 @@ export const actions = {
     [T.CHANGE_WORKSPACE_ID]({ commit }, workspaceId) {
         commit(T.CHANGE_WORKSPACE_ID, workspaceId);
     },
+
+
+    [T.GET_TOOLS]({ commit }, params) {
+        let options = {
+            url() {
+                return `${apiURL}/api/workspace/tools/` + params.workspaceId + "/" + params.toolName;
+            }
+        };
+        let api = axios.create();
+
+        console.log(params.token)
+        console.log(params);
+        /*
+        axios
+            .all([
+                api.get(options.url(), {
+                    headers: {
+                        auth: params.token
+                    }
+                })
+            ])
+            .then(responses => {
+                console.log(responses);
+                let errors = responses.filter(res => {
+                    return res.status !== 200;
+                });
+                if (errors.length < 1) {
+                    params.cb(responses[0].data);
+                }
+
+            })
+            .catch(error => {
+                params.cErr(error.response);
+            });
+            */
+    },
+    [T.ADD_TOOL]({ commit }, params) {
+        let options = {
+            url() {
+                return `${apiURL}/api/workspace/tools/` + params.workspaceId;
+            }
+        };
+        let api = axios.create();
+
+        console.log(params.token)
+        console.log(params);
+        /*
+        axios
+            .all([
+                api.post(options.url(), params.toolData, {
+                    headers: {
+                        auth: params.token
+                    }
+                })
+            ])
+            .then(responses => {
+                console.log(responses);
+                let errors = responses.filter(res => {
+                    return res.status !== 200;
+                });
+                if (errors.length < 1) {
+                    params.cb(responses[0].data);
+                }
+
+            })
+            .catch(error => {
+                params.cErr(error.response);
+            });
+            */
+    },
+    [T.EDIT_TOOL]({ commit }, params) {
+        let options = {
+            url() {
+                return `${apiURL}/api/workspace/tools/` + params.workspaceId;
+            }
+        };
+        let api = axios.create();
+
+        console.log(params.token)
+        console.log(params);
+        /*
+        axios
+            .all([
+                api.put(options.url(), params.toolData, {
+                    headers: {
+                        auth: params.token
+                    }
+                })
+            ])
+            .then(responses => {
+                console.log(responses);
+                let errors = responses.filter(res => {
+                    return res.status !== 200;
+                });
+                if (errors.length < 1) {
+                    params.cb(responses[0].data);
+                }
+
+            })
+            .catch(error => {
+                params.cErr(error.response);
+            });
+            */
+    },
+    [T.DELETE_TOOL]({ commit }, params) {
+        let options = {
+            url() {
+                return `${apiURL}/api/workspace/tools/` + params.workspaceId + "/" + params.toolName;
+            }
+        };
+        let api = axios.create();
+
+        console.log(params.token)
+        console.log(params);
+        /*
+        axios
+            .all([
+                api.delete(options.url(), {
+                    headers: {
+                        auth: params.token
+                    }
+                })
+            ])
+            .then(responses => {
+                console.log(responses);
+                let errors = responses.filter(res => {
+                    return res.status !== 200;
+                });
+                if (errors.length < 1) {
+                    params.cb(responses[0].data);
+                }
+
+            })
+            .catch(error => {
+                params.cErr(error.response);
+            });
+            */
+    },
+
+
+
     // [T.ADD_MEETINGLOG]({ commit }, params) {
     //     let options = {
     //         url() {
