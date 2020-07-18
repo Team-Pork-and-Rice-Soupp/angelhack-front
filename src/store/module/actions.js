@@ -232,5 +232,39 @@ export const actions = {
 
     [T.CHANGE_WORKSPACE_ID]({ commit }, workspaceId) {
         commit(T.CHANGE_WORKSPACE_ID, workspaceId);
-    }
+    },
+    // [T.ADD_MEETINGLOG]({ commit }, params) {
+    //     let options = {
+    //         url() {
+    //             return `${apiURL}/api/workspace/${params.workspaceId}/log`;
+    //         }
+    //     };
+    //     let api = axios.create();
+
+    //     console.log(params.token)
+    //     axios
+    //         .all([
+    //             api.get(options.url(), {
+    //                 params: {
+    //                     keyword: params.keyword
+    //                 },
+    //                 headers: {
+    //                     auth: params.token
+    //                 }
+    //             })
+    //         ])
+    //         .then(responses => {
+    //             console.log(responses);
+    //             let errors = responses.filter(res => {
+    //                 return res.status !== 200;
+    //             });
+    //             if (errors.length < 1) {
+    //                 params.cb(responses[0].data);
+    //             }
+
+    //         })
+    //         .catch(error => {
+    //             params.cErr(error.response);
+    //         });
+    // },
 };
