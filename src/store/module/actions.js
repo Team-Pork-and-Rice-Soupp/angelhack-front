@@ -233,38 +233,139 @@ export const actions = {
     [T.CHANGE_WORKSPACE_ID]({ commit }, workspaceId) {
         commit(T.CHANGE_WORKSPACE_ID, workspaceId);
     },
-    // [T.ADD_MEETINGLOG]({ commit }, params) {
-    //     let options = {
-    //         url() {
-    //             return `${apiURL}/api/workspace/${params.workspaceId}/log`;
-    //         }
-    //     };
-    //     let api = axios.create();
 
-    //     console.log(params.token)
-    //     axios
-    //         .all([
-    //             api.get(options.url(), {
-    //                 params: {
-    //                     keyword: params.keyword
-    //                 },
-    //                 headers: {
-    //                     auth: params.token
-    //                 }
-    //             })
-    //         ])
-    //         .then(responses => {
-    //             console.log(responses);
-    //             let errors = responses.filter(res => {
-    //                 return res.status !== 200;
-    //             });
-    //             if (errors.length < 1) {
-    //                 params.cb(responses[0].data);
-    //             }
+    // 회의록 관련
+    [T.ADD_MEETINGLOG]({ commit }, _params) {
+        let options = {
+            url() {
+                return `${apiURL}/api/workspace/${_params.workspaceId}/log`;
+            }
+        };
+        let api = axios.create();
 
-    //         })
-    //         .catch(error => {
-    //             params.cErr(error.response);
-    //         });
-    // },
+        console.log(_params.token)
+        axios
+            .all([
+                api.post(options.url(), 
+                {
+                    title: _params.data.title,
+                    content: _params.data.content
+                },
+                {
+                    headers: {
+                        auth: _params.token
+                    }
+                })
+            ])
+            .then(responses => {
+                console.log(responses);
+                let errors = responses.filter(res => {
+                    return res.status !== 200;
+                });
+                if (errors.length < 1) {
+                    _params.cb(responses[0].data);
+                } else {
+                    console.error("shit what happened?")
+                }
+
+            })
+            .catch(error => {
+                _params.cErr(error.response);
+            });
+    },
+    [T.GET_MEETINGLOG]({ commit }, params) { // workspaceId, token, cb, cErr
+        console.log("params.workspaceId >> ", params.workspaceId);
+        let options = {
+            url() {
+                return `${apiURL}/api/workspaces/${params.workspaceId}/logs`;
+            }
+        };
+        let api = axios.create();
+
+        console.log(params.token)
+        axios
+            .all([
+                api.get(options.url(), {
+                    headers: {
+                        auth: params.token
+                    }
+                })
+            ])
+            .then(responses => {
+                console.log(responses);
+                let errors = responses.filter(res => {
+                    return res.status !== 200;
+                });
+                if (errors.length < 1) {
+                    params.cb(responses[0].data);
+                }
+            })
+            .catch(error => {
+                params.cErr(error);
+            });
+    },
+    [T.UPDATE_MEETINGLOG]({ commit }, _params) { 
+        console.log("params.workspaceId >> ", _params.workspaceId);
+        let options = {
+            url() {
+                return `${apiURL}/api/workspace/${_params.workspaceId}/log`
+            }
+        };
+        let api = axios.create();
+
+        console.log(_params.token)
+        axios
+            .all([
+                api.put(options.url(), _params.reqBody, {
+                    headers: {
+                        auth: _params.token
+                    }
+                })
+            ])
+            .then(responses => {
+                console.log(responses);
+                let errors = responses.filter(res => {
+                    return res.status !== 200;
+                });
+                if (errors.length < 1) {
+                    _params.cb(responses[0].data);
+                }
+            })
+            .catch(error => {
+                _params.cErr(error);
+            });
+    },
+    [T.DELETE_MEETINGLOG]({ commit }, _params) { 
+        console.log("params.workspaceId >> ", _params.workspaceId);
+        let options = {
+            url() {
+                return `${apiURL}/api/workspace/${_params.workspaceId}/log/${_params.logId}`
+            }
+        };
+        let api = axios.create();
+
+        console.log(_params.token)
+        axios
+            .all([
+                api.delete(options.url(),{
+                    headers: {
+                        auth: _params.token
+                    }
+                })
+            ])
+            .then(responses => {
+                console.log("success responses >> ", responses);
+                let errors = responses.filter(res => {
+                    return res.status !== 202;
+                });
+                if (errors.length < 1) {
+                    _params.cb(responses[0].data);
+                } else {
+                    console.log("shit shit shit")
+                }
+            })
+            .catch(error => {
+                _params.cErr(error);
+            });
+    },
 };

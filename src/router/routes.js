@@ -34,6 +34,18 @@ const routes = [
     ]
   },
   {
+    path: '/EditMeetingLog',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { 
+        name: "EditMeetingLog",
+        path: "", 
+        component: () => import('pages/AddMeetingLog.vue'),
+        props: true
+      }
+    ]
+  },
+  {
     path: '/MeetingLog',
     component: () => import('layouts/MainLayout.vue'),
     children: [

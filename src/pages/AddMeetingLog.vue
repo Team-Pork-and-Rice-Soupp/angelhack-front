@@ -20,7 +20,7 @@
     <div id="summernote"></div>
 
     <div style="display: flex;">
-      <q-btn label="저장" color="primary" flat @click="onclickSave"/>
+      <q-btn label="저장" color="primary" flat @click="onclickSave" />
     </div>
 
     <!-- 템플릿 선택 dialog -->
@@ -58,15 +58,15 @@
       <q-card>
         <q-card-section>
           <h4>템플릿 변경</h4>
-        </q-card-section>         
+        </q-card-section>
 
-        <q-card-section class="row items-center">           
+        <q-card-section class="row items-center">
           <span class="q-ml-sm">템플릿을 변경하면 이전에 작성중인 내용을 모두 잃게됩니다! 그래도 변경하시겠습니까?</span>
         </q-card-section>
 
         <q-card-actions align="right">
           <q-btn flat label="확인" color="negative" @click="selectTemplate" />
-          <q-btn flat label="취소" color="primary" v-close-popup />          
+          <q-btn flat label="취소" color="primary" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -74,8 +74,16 @@
 </template>
 
 <script>
+import { T } from "../store/module/types.js";
+import { mapGetters } from "vuex";
+
 export default {
   name: "add-meeting-log",
+  computed: {
+    ...mapGetters({
+      workspaceId: "getWorkspaceId"
+    })
+  },
   data() {
     return {
       title: "",
@@ -87,28 +95,79 @@ export default {
         template2: `<p><b>템플릿2</b><br></p><p style="box-sizing: inherit; -webkit-tap-highlight-color: transparent; margin: 0px 0px 16px; color: rgb(51, 51, 51); font-family: Roboto, -apple-system, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial;"><u>와 더멋지다!</u></p><ol><li style="box-sizing: inherit; -webkit-tap-highlight-color: transparent; margin: 0px 0px 16px; color: rgb(51, 51, 51); font-family: Roboto, -apple-system, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial;">우와</li></ol>`,
         template3: "<p>템플릿 3</p>"
       },
-      selectedTemplate: ""
+      selectedTemplate: "",
+      content: ""
     };
   },
   mounted() {
     this.initSummernote();
-    this.selectedTemplate = this.$route.params.template;
+    if (this.$route.params.editing) {
+      (this.title = this.$route.params.title),
+        (this.selectedTemplate = this.$route.params.content);
+    } else {
+      this.selectedTemplate = this.$route.params.template;
+    }
     this.selectTemplate();
   },
   methods: {
     onclickSave() {
+      let vue = this;
       // dispatch해서 회의록 서버로 보내도록 한다.
+      if (!this.$route.params.editing) {
+        this.$store.dispatch(T.ADD_MEETINGLOG, {
+          // workspaceId, token, data, cb, cErr
+          workspaceId: this.workspaceId,
+          token: localStorage.getItem("token"),
+          data: {
+            title: this.title,
+            content: this.content
+          },
+          cb: result => {
+            alert("회의록을 저장하였습니다.");
+            this.$router.push(`/Dashboard?id=${this.workspaceId}`);
+          },
+          cErr: result => {
+            alert("회의록 저장 중 문제가 발생하였습니다.");
+            console.log(result);
+          }
+        });
+      } else {
+        // dispatch to editing api.
+        this.$store.dispatch(T.UPDATE_MEETINGLOG, { // workspaceId, token, reqBody, cb, cErr
+          workspaceId: this.workspaceId,
+          token: localStorage.getItem("token"),
+          reqBody: {
+            content: this.content,
+            id: this.$route.params.id,
+            title: this.title
+          },
+          cb: result => {
+            alert("회의록이 수정되었습니다.");
+            this.$router.push(`/Dashboard?id=${this.workspaceId}`);
+          },
+          cErr: result => {
+            alert("회의록 수정 중 문제가 발생하였습니다.");
+            console.log(result);
+          }
+        })
+      }
 
       // 현재 토큰, 또는 id값 따위로 다시 dashboard로 넘어간다.
-      
-      this.$router.push("/Dashboard?id=mansbuy13579");
+
+      // this.$router.push("/Dashboard?id=mansbuy13579");
     },
     initSummernote() {
+      let vue = this;
       $("#summernote").summernote({
         height: 300, // set editor height
         minHeight: null, // set minimum height of editor
         maxHeight: null, // set maximum height of editor
-        focus: true // set focus to editable area after initializing summernote
+        focus: true, // set focus to editable area after initializing summernote
+        callbacks: {
+          onChange: (contents, $editable) => {
+            vue.content = contents;
+          }
+        }
       });
       this.editerExists = true;
     },

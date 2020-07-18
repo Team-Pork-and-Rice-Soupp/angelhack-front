@@ -216,7 +216,9 @@ export default {
     selectTemplate(template) {
       this.$router.push({
         name: "AddMeetingLog",
-        params: { template: template }
+        params: { 
+          template: template,
+        }
       });
       this.logTemplateDialog = false;
     },
