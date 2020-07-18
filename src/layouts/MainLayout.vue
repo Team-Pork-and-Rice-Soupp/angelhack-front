@@ -2,7 +2,10 @@
   <div class="mylayout">
     <div class="mylayout__top" :class="topStyle">
       <div class="title">Title</div>
-      <div>{{userInfo.name}}</div>
+      <div class="account">
+        <span>{{userInfo.name}}</span>
+        <q-btn label="LOGOUT" color="red" @click="onClickLogout" flat />
+      </div>
     </div>
 
     <div class="mylayout__contents">
@@ -16,6 +19,7 @@
 </template>
 
 <script>
+import { T } from "../store/module/types.js";
 import { mapGetters } from "vuex";
 
 export default {
@@ -30,6 +34,16 @@ export default {
     return {
       loading: false
     };
+  },
+  methods: {
+    movePage(pageName) {
+      this.$router.push(`${pageName}`);
+    },
+    onClickLogout() {
+      this.$store.dispatch(T.LOGOUT);
+      this.movePage("/");
+      alert("로그아웃 되었습니다.");
+    }
   }
 };
 </script>
@@ -56,6 +70,17 @@ html {
         .title {
           font-size: 16px;
           font-weight: bold;
+        }
+
+        .account {
+          display: flex;
+          align-items: center;
+          span {
+            font-size: 16px;
+          }
+          button {
+            margin-left: 10px;
+          }
         }
       }
 

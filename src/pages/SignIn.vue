@@ -30,6 +30,11 @@ export default {
     };
   },
   mounted() {
+    this.$store.dispatch(T.LOGIN_CHECK, {
+      goFront: () => {
+        this.$router.push("/ProjectList");
+      }
+    });
     this.$store.dispatch(T.CHANGE_TOP_STYLE, "none");
   },
   methods: {

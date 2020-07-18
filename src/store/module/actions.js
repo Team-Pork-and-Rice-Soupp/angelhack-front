@@ -66,16 +66,24 @@ export const actions = {
             });
 
     },
-    [T.LOGOUT]({ commit }, params) {
-        console.log(params);
+    [T.LOGOUT]({ commit }) {
+        sessionStorage.removeItem("userInfo")
+        commit(T.LOGOUT);
     },
     [T.LOGIN_CHECK]({ commit }, params) {
         let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+        console.log(userInfo)
         if (userInfo) {
             commit(T.CHANGE_USER_INFO, userInfo);
+            if (params.goFront) {
+                params.goFront();
+            }
         } else {
-            params.goBack();
-            alert("다시 로그인 해주세요.")
+            if (params.goBack) {
+                params.goBack();
+                alert("다시 로그인 해주세요.")
+            }
+
         }
     },
 
