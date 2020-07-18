@@ -36,7 +36,7 @@ export default {
         title: this.$children.find(v => v.vueName == "addWorkspace").title,
         description: this.$children.find(v => v.vueName == "addWorkspace")
           .description,
-        members: this.$children.find(v => v.vueName == "addWorkspace").members
+        members: this.$children.find(v => v.vueName == "addWorkspace").refineMembers()
       };
 
       if (addWorkspaceInfo.title == "") {
@@ -45,6 +45,7 @@ export default {
         alert("워크스페이스의 설명을 입력해주세요.");
       } else {
         let vue = this;
+        console.log("addWorkspaceInfo >> ", addWorkspaceInfo);
 
         this.$store.dispatch(T.ADD_WORKSPACE, {
           token: localStorage.getItem("token"),
