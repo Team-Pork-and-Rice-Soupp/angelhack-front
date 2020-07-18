@@ -53,6 +53,7 @@ export default {
 <style lang="scss" scoped>
 .step-div {
   padding: 0 10px;
+  min-width: 150px;
   &__title {
     display: flex;
     align-items: center;

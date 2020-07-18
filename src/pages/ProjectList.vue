@@ -62,8 +62,7 @@ export default {
 
 <style lang="scss" scoped>
 .project-list {
-  width: 70%;
-  margin: 0 auto;
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
 }

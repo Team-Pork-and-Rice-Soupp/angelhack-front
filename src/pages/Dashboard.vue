@@ -2,19 +2,17 @@
   <div class="dashboard">
     <div class="dashboard__top">
       <q-card class="card__workspace">
-        <q-card-section>
-          <div class="text-h4">{{title}}</div>
-          <div class="text-subtitle1">{{description}}</div>
-          <q-btn label="Close" @click="onClickClose" />
-        </q-card-section>
+        <span class="title">{{title}}</span>
+        <span>{{description}}</span>
       </q-card>
       <q-card class="card__member">
-        <q-card-section>
+        <span class="title">참여 멤버 (총 {{members.length}}명)</span>
+        <div class="scroll">
           <div v-for="(item,index) in members" :key="index">
             <span>{{item.email}}</span>
             <span>{{item.name}}</span>
           </div>
-        </q-card-section>
+        </div>
       </q-card>
     </div>
 
@@ -65,15 +63,24 @@
     </div>
 
     <div class="dashboard__bottom">
-      <q-card class="card__meeting-log">
-        <q-card-section>
-          <q-btn label="회의록 생성" @click="createMeetingLog" />
-          <q-btn label="회의록 확인" @click="movePage('/MeetingLog')" />
-        </q-card-section>
+      <q-card class="card__bottom-button" @click="createMeetingLog">
+        <q-icon name="create" />
+        <span>회의록 작성</span>
       </q-card>
 
-      <q-card class="card__contribution" :class="seeResult" @click="showContribution">
-        <q-card-section>기여도 관련</q-card-section>
+      <q-card class="card__bottom-button" @click="movePage('/MeetingLog')">
+        <q-icon name="assignment" />
+        <span>회의록 확인</span>
+      </q-card>
+
+      <q-card class="card__bottom-button" @click="showContribution">
+        <q-icon name="assessment" />
+        <span>기여도 확인</span>
+      </q-card>
+
+      <q-card class="card__bottom-button" @click="onClickClose">
+        <q-icon name="close" />
+        <span>워크스페이스 종료</span>
       </q-card>
     </div>
 
@@ -341,10 +348,38 @@ export default {
 
   .card {
     &__workspace {
+      padding: 10px 15px;
       width: 59%;
+      display: flex;
+      flex-direction: column;
+      .title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+      span {
+        font-size: 14px;
+      }
     }
     &__member {
+      padding: 10px 15px;
       width: 39%;
+      display: flex;
+      flex-direction: column;
+      .title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+      .scroll {
+        overflow: scroll;
+        div {
+          margin-bottom: 4px;
+          width: 80%;
+          display: flex;
+          justify-content: space-between;
+        }
+      }
     }
     &__step {
       width: 100%;
@@ -352,7 +387,7 @@ export default {
       align-items: center;
       justify-content: center;
       .step-wrapper {
-        padding: 5%;
+        padding: 4px;
         width: 100%;
         display: flex;
         align-items: center;
@@ -365,11 +400,30 @@ export default {
         }
       }
     }
-    &__meeting-log {
-      width: 59%;
+
+    &__bottom-button {
+      width: 24%;
+      padding: 10px 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      i {
+        font-size: 40px;
+        color: #070819;
+      }
+      span {
+        color: #070819;
+        font-size: 18px;
+      }
     }
-    &__contribution {
-      width: 39%;
+
+    &__bottom-button:hover {
+      background-color: #ececec;
+    }
+
+    &__bottom-button:active {
+      background-color: #b9b9b9;
     }
   }
 }
