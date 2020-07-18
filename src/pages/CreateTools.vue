@@ -416,7 +416,9 @@ export default {
               break;
             case "3":
               toolData.toolName = "paretoChart";
-              toolData.contents = JSON.stringify();
+              toolData.contents = JSON.stringify(
+                this.$children.find(v => v.vueName == "paretoChart").data
+              );
               break;
           }
           break;

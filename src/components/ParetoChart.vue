@@ -35,10 +35,19 @@
       </div>
 
       <div v-if="tableEnabled">
-        <q-table title="데이터" :data="data" :columns="columns" row-key="number" selection="multiple"  class="table"> <!--row-key="name-->
+        <q-table
+          title="데이터"
+          :data="data"
+          :columns="columns"
+          row-key="number"
+          selection="multiple"
+          class="table"
+        >
+          <!--row-key="name-->
           <template v-slot:header="props">
             <q-tr :props="props">
-              <q-th v-for="col in props.cols" :key="col.name" :props="props">{{ col.label }}</q-th> <!--column이기 때문에 name이 키가 맞음.-->
+              <q-th v-for="col in props.cols" :key="col.name" :props="props">{{ col.label }}</q-th>
+              <!--column이기 때문에 name이 키가 맞음.-->
             </q-tr>
           </template>
 
@@ -47,10 +56,11 @@
               <q-td key="number" :props="props">{{ props.row.number }}</q-td>
               <q-td key="item" :props="props">{{ props.row.item }}</q-td>
               <q-td key="quantity" :props="props">{{ props.row.quantity }}</q-td>
-              <q-td><q-btn label="삭제" color="negative" @click="deleteRow(props.row)"/></q-td>
+              <q-td>
+                <q-btn label="삭제" color="negative" @click="deleteRow(props.row)" />
+              </q-td>
             </q-tr>
           </template>
-
         </q-table>
         <q-input filled v-model="newData.item" :label="scaleOption.xScaleLabel" />
         <q-input filled v-model="newData.quantity" type="number" :label="scaleOption.yScaleLabel" />
@@ -73,6 +83,7 @@ export default {
   // }
   data() {
     return {
+      vueName: "paretoChart",
       tableEnabled: false,
       scaleOption: {
         xScaleLabel: "",
@@ -91,19 +102,19 @@ export default {
           name: "number",
           required: true,
           label: "번호",
-          align: "center",
+          align: "center"
         },
         {
           name: "item",
           align: "center",
           label: "항목",
-          field: "item",
+          field: "item"
         },
         {
           name: "quantity",
           label: "수량",
-          field: "quantity",
-        }, 
+          field: "quantity"
+        },
         {
           name: "deleteButton",
           align: "center",
@@ -220,29 +231,35 @@ export default {
       let index = this.data.findIndex(datum => datum.number == row.number);
       let datum = this.data[index];
 
-      let labelIndex = this.datacollection.labels.findIndex(label => label == datum.item);
-      let dataIndex = this.datacollection.datasets[1].data.findIndex(datm => datm == datum.quantity);
+      let labelIndex = this.datacollection.labels.findIndex(
+        label => label == datum.item
+      );
+      let dataIndex = this.datacollection.datasets[1].data.findIndex(
+        datm => datm == datum.quantity
+      );
 
       this.datacollection.labels.splice(labelIndex, 1);
       this.datacollection.datasets[1].data.splice(dataIndex, 1);
 
       this.datacollection.datasets[0].data = [];
-      let sum = this.datacollection.datasets[1].data.reduce((acc, cur) => parseInt(acc) + parseInt(cur)); 
+      let sum = this.datacollection.datasets[1].data.reduce(
+        (acc, cur) => parseInt(acc) + parseInt(cur)
+      );
       console.log("sum >> ", sum);
       let accPercent = 0;
       this.datacollection.datasets[1].data.forEach(datum => {
-          let percent = datum / sum * 100;
-          accPercent += percent;
-          console.log("percent >> ", percent);
-          console.log("accPercent >> ", accPercent);
-          this.datacollection.datasets[0].data.push(accPercent);          
+        let percent = (datum / sum) * 100;
+        accPercent += percent;
+        console.log("percent >> ", percent);
+        console.log("accPercent >> ", accPercent);
+        this.datacollection.datasets[0].data.push(accPercent);
       });
 
       this.data.splice(index, 1);
-      
+
       this.refreshChart *= -1;
     },
-    enableTable() {      
+    enableTable() {
       this.options.scales.xAxes[0].scaleLabel.labelString = this.scaleOption.xScaleLabel;
       this.options.scales.yAxes[0].scaleLabel.labelString = this.scaleOption.yScaleLabel;
       this.columns[1].label = this.scaleOption.xScaleLabel;
@@ -272,15 +289,17 @@ export default {
         this.datacollection.datasets[1].data.push(temp.quantity);
       });
 
-      let sum = this.datacollection.datasets[1].data.reduce((acc, cur) => parseInt(acc) + parseInt(cur)); 
+      let sum = this.datacollection.datasets[1].data.reduce(
+        (acc, cur) => parseInt(acc) + parseInt(cur)
+      );
       console.log("sum >> ", sum);
       let accPercent = 0;
       this.datacollection.datasets[1].data.forEach(datum => {
-          let percent = datum / sum * 100;
-          accPercent += percent;
-          console.log("percent >> ", percent);
-          console.log("accPercent >> ", accPercent);
-          this.datacollection.datasets[0].data.push(accPercent);          
+        let percent = (datum / sum) * 100;
+        accPercent += percent;
+        console.log("percent >> ", percent);
+        console.log("accPercent >> ", accPercent);
+        this.datacollection.datasets[0].data.push(accPercent);
       });
 
       this.newData = {
