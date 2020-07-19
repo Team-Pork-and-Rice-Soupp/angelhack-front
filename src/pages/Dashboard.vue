@@ -530,6 +530,22 @@ export default {
           }
         });
       });
+      if (
+        this.stepData[3].writed.findIndex(el => el.label == "기여도 작성") != -1
+      ) {
+        this.stepData[3].writed.splice(
+          this.stepData[0].writed.findIndex(el => el.label == "기여도 작성"),
+          1
+        );
+      }
+
+      this.stepData[3].writed.push({
+        label: "기여도 작성",
+        click: () => {
+          this.assessmentDialog = true;
+          this.assD = 3;
+        }
+      });
 
       this.documentCheck = false;
     },
