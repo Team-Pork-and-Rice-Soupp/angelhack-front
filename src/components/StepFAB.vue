@@ -36,9 +36,19 @@
 <script>
 export default {
   props: ["title", "description", "stepData", "addStep"],
+  data() {
+    return {
+      check :true
+    }
+  },
+  mounted() {
+    if(this.title == "아이디어 도출"){
+      console.log(this.$parent.$parent);
+    }
+  },
   methods: {
-    onClick() {
-      console.log("click");
+    movePage(pageName) {
+      this.$router.push(`${pageName}`);
     },
     hideFAB() {
       this.$refs.fab.hide();

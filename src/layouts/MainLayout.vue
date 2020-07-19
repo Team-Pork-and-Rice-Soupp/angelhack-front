@@ -1,7 +1,7 @@
 <template>
   <div class="mylayout">
     <div class="mylayout__top" :class="topStyle">
-      <div class="title">Title</div>
+      <div class="title">프로젝트 관리 도구</div>
       <div class="account">
         <span>{{userInfo.name}}</span>
         <q-btn label="LOGOUT" color="red" @click="onClickLogout" flat />
