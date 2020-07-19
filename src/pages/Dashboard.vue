@@ -569,7 +569,9 @@ export default {
               title: "아이디어 도출",
               workspaceId: this.workspaceId
             },
-            cb: () => {}
+            cb: () => {
+              location.reload();
+            }
           });
 
           break;
