@@ -21,6 +21,41 @@ const routes = [
       { path: "", component: () => import('pages/AddProject.vue') }
     ]
   },
+  {
+    path: '/AddMeetingLog',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { 
+        name: "AddMeetingLog",
+        path: "", 
+        component: () => import('pages/AddMeetingLog.vue'),
+        props: true
+      }
+    ]
+  },
+  {
+    path: '/MeetingLog',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: "", component: () => import('pages/MeetingLog.vue') }
+    ]
+  },
+  {
+    path: '/ContributionStat',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: "", component: () => import('pages/ContributionStat.vue') }
+    ]
+  },
+
+  {
+    path: '/CreateTools',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: "", component: () => import('pages/CreateTools.vue') }
+    ]
+  },
+
 
 
   {
@@ -46,7 +81,20 @@ const routes = [
       { path: "", component: () => import('pages/EditWorkspace.vue') }
     ]
   },
-
+  { // test route.
+    path: '/pareto-temp',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: "", component: () => import('components/ParetoChart.vue') }
+    ]
+  },
+  { // test route.
+    path: '/peer-assessment',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: "", component: () => import('components/PeerAssessment.vue') }
+    ]
+  },
   // Always leave this as last one,
   // but you can also remove it
   {

@@ -1,12 +1,7 @@
 <template>
   <div class="project-list">
-    <workspace-card :workspaceId="item.Id" v-for="(item, index) in projects" :key="index">
-      <template v-slot:card-title>{{item.title}}</template>
-      <template v-slot:card-description>{{item.description}}</template>
-    </workspace-card>
-    <workspace-card :addButton="true">
-      <template v-slot:add-card>new+</template>
-    </workspace-card>
+    <workspace-card v-for="(item, index) in projects" :key="index" :workspace="item" />
+    <workspace-card />
   </div>
 </template>
 
@@ -17,24 +12,19 @@ import WorkspaceCard from "../components/WorkspaceCard";
 export default {
   data() {
     return {
-      projects: [
-        {
-          title: "test1",
-          description: "설명입니다.",
-          Id: "q1w2e3r4"
-        },
-        {
-          title: "test2",
-          description: "설명입니다.",
-          Id: "mansbuy13579"
-        }
-      ]
+      projects: []
     };
   },
   components: {
     WorkspaceCard
   },
   mounted() {
+    this.$store.dispatch(T.LOGIN_CHECK, {
+      goBack: () => {
+        this.$router.push("/");
+      }
+    });
+
     this.$store.dispatch(T.CHANGE_TOP_STYLE, "");
 
     this.getProjects();
@@ -44,15 +34,17 @@ export default {
       this.$router.push(`${pageName}`);
     },
     getProjects() {
+      let vue = this;
       this.$store.dispatch(T.GET_PROJECTS, {
-        userId: "",
-        cb: () => {
-          console.log("GET_PROJECTS");
+        token: localStorage.getItem("token"),
+        cb: res => {
+          console.log(res);
+          vue.projects = res;
+        },
+        cErr: err => {
+          console.log(err);
         }
       });
-    },
-    action1() {
-      console.log("action1");
     },
     addProject() {
       this.movePage("/AddProject");
@@ -63,8 +55,7 @@ export default {
 
 <style lang="scss" scoped>
 .project-list {
-  width: 70%;
-  margin: 0 auto;
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
 }

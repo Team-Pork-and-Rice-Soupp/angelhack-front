@@ -1,7 +1,9 @@
 <template>
   <div class="signin">
     <div class="signin__card">
-      <h1>서비스 이름 or 서비스 로고</h1>
+      <div class="signin-title">엔젤핵 해커톤</div>
+      <div class="signin-title">돼지국빱팀</div>
+      <div class="signin-title">프로젝트 관리 도구</div>
       <q-input label="Email" type="email" v-model="email" />
       <q-input label="Password" type="password" v-model="password" />
       <q-slide-transition>
@@ -30,6 +32,11 @@ export default {
     };
   },
   mounted() {
+    this.$store.dispatch(T.LOGIN_CHECK, {
+      goFront: () => {
+        this.$router.push("/ProjectList");
+      }
+    });
     this.$store.dispatch(T.CHANGE_TOP_STYLE, "none");
   },
   methods: {
@@ -49,9 +56,18 @@ export default {
           this.$store.dispatch(T.SIGN_IN, {
             email: this.email,
             password: this.password,
-            cb: () => {
-              console.log("Sign In");
+            cb: res => {
+              let userInfo = {
+                email: res.email,
+                name: res.name
+              };
+              vue.$store.dispatch(T.CHANGE_USER_INFO, userInfo);
+              localStorage.setItem("token", res.token);
+              sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
               vue.movePage("/ProjectList");
+            },
+            cErr: err => {
+              alert("로그인에 문제가 발생하였습니다.");
             }
           });
         }
@@ -72,11 +88,14 @@ export default {
             password: this.password,
             name: this.name,
             cb: () => {
-              console.log("Sign Up");
               vue.email = "";
               vue.password = "";
               vue.name = "";
               vue.signUpOpened = false;
+              alert("회원가입이 성공적으로 되었습니다.");
+            },
+            cErr: () => {
+              alert("회원가입에 문제가 발생하였습니다.");
             }
           });
         }
@@ -96,8 +115,15 @@ export default {
     justify-content: center;
     align-items: center;
     margin-top: 10%;
-    h1 {
-      font-size: 18px;
+
+    .signin-title {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .signin-title:nth-child(3) {
+      font-size: 24px;
+      font-weight: bold;
     }
 
     label {

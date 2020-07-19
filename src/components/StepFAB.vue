@@ -6,6 +6,8 @@
         icon="keyboard_arrow_down"
         direction="down"
         :disable="stepData.locked"
+        ref="fab"
+        @show="showFAB()"
       >
         <q-fab-action
           external-label
@@ -34,9 +36,25 @@
 <script>
 export default {
   props: ["title", "description", "stepData", "addStep"],
+  data() {
+    return {
+      check :true
+    }
+  },
+  mounted() {
+    if(this.title == "아이디어 도출"){
+      console.log(this.$parent.$parent);
+    }
+  },
   methods: {
-    onClick() {
-      console.log("click");
+    movePage(pageName) {
+      this.$router.push(`${pageName}`);
+    },
+    hideFAB() {
+      this.$refs.fab.hide();
+    },
+    showFAB() {
+      this.$parent.$parent.toggleFAB(this.title);
     }
   }
 };
@@ -45,6 +63,7 @@ export default {
 <style lang="scss" scoped>
 .step-div {
   padding: 0 10px;
+  min-width: 150px;
   &__title {
     display: flex;
     align-items: center;

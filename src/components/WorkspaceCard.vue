@@ -1,46 +1,64 @@
 <template>
-  <q-card @click="clickAction" class="workspace-card">
-    <div v-if="!addButton" class="workspace-card__contents">
-      <q-card-section>
-        <h1>
-          <slot name="card-title"></slot>
-        </h1>
-      </q-card-section>
-
-      <q-card-section>
-        <p>
-          <slot name="card-description"></slot>
-        </p>
-      </q-card-section>
+  <q-card @click="onClickCard" class="workspace-card">
+    <div class="top">
+      <q-icon :name="workspace ? 'assignment' : 'add_box'" />
+      <q-btn v-if="workspace" label="DELETE" flat color="red" @click="clickLock = true" />
     </div>
 
-    <div v-if="addButton === true" class="workspace-card__contents">
-      <q-card-section>
-        <div class="add-card">
-          <slot name="add-card"></slot>
+    <span class="title">{{workspace ? workspace.title : "워크스페이스 생성"}}</span>
+    <span>{{workspace ? workspace.description : ''}}</span>
+
+    <!-- Dialog -->
+    <q-dialog v-model="clickLock">
+      <div class="dashboard-dialog">
+        <div class="dashboard-dialog__text">워크스페이스를 삭제하시겠습니까?</div>
+        <div class="dashboard-dialog__buttons">
+          <q-btn flat label="취소" v-close-popup />
+          <q-btn flat label="삭제" color="red" @click="onClickDelete" />
         </div>
-      </q-card-section>
-    </div>
+      </div>
+    </q-dialog>
   </q-card>
 </template>
 
 <script>
+import { T } from "../store/module/types.js";
+
 export default {
-  name: "workspace-card",
-  props: ["workspaceId", "addButton"],
+  props: ["workspace"],
   data() {
-    return {};
+    return {
+      clickLock: false
+    };
   },
   methods: {
     movePage(pageName) {
       this.$router.push(`${pageName}`);
     },
-    clickAction() {
-      if (this.addButton) {
-        this.$router.push("/AddProject");
-      } else {
-        this.movePage("/Dashboard?id=" + this.workspaceId);
+    onClickCard() {
+      if (!this.clickLock) {
+        if (this.workspace) {
+          this.movePage("/Dashboard?id=" + this.workspace.id);
+        } else {
+          this.$router.push("/AddProject");
+        }
       }
+    },
+    onClickDelete() {
+      let vue = this;
+      this.$store.dispatch(T.DELETE_WORKSPACE, {
+        workspaceId: this.workspace.id,
+        token: localStorage.getItem("token"),
+        cb: () => {
+          vue.$parent.getProjects();
+          alert("워크스페이스가 삭제되었습니다.")
+        },
+        cErr: err => {
+          console.log(err);
+          alert("오류가 발생하였습니다.");
+        }
+      });
+      this.clickLock = false;
     }
   }
 };
@@ -48,36 +66,43 @@ export default {
 
 <style lang="scss" scoped>
 .workspace-card {
-  // width: 100%;
-  // height: 100%;
-  // max-width: 250px;
-  // max-height: 250px;
-  width: 250px;
-  height: 250px;
-  margin: 25px;
-  background-color: #aae0ff;
-  color: white;
+  padding: 10px 15px;
+  margin: 0 10px 15px;
   display: flex;
-  &:hover {
-    cursor: pointer;
-  }
-  h1 {
-    font-size: 30px;
-    font-weight: bold;
-  }
-  p {
-    font-size: 10px;
-  }
-  .add-card {
-    font-size: 60px;
-    font-weight: bold;
-    text-align: center;
-  }
-  &__contents {
+  flex-direction: column;
+  justify-content: space-between;
+  width: 350px;
+  min-height: 160px;
+
+  cursor: pointer;
+  color: #070819;
+
+  .top {
+    width: 100%;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    i {
+      font-size: 40px;
+      color: #070819;
+    }
+  }
+
+  .title {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+
+  span {
+    font-size: 14px;
+  }
+
+  &:hover {
+    background-color: #ececec;
+  }
+
+  &:active {
+    background-color: #b9b9b9;
   }
 }
 </style>
