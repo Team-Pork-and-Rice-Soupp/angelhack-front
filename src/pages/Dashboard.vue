@@ -52,7 +52,7 @@
           ></step-fab>
           <hr />
           <step-fab
-            title="IF"
+            title="해결 정리"
             description="설명"
             :stepData="stepData[4]"
             :addStep="addStep"
@@ -124,6 +124,26 @@
         </q-card-section>
       </q-card>
     </q-dialog>
+
+    <!-- Dialog -->
+    <q-dialog v-model="assessmentDialog">
+      <div class="dashboard-dialog">
+        <div class="dashboard-dialog__text ass">
+          <div v-for="(m, index) in assData" :key="index">
+            <q-input
+              filled
+              v-model="m.score"
+              :label="m.name +'의 점수'"
+              :disable="userInfo.name == m.name ? true : false "
+            />
+          </div>
+        </div>
+        <div class="dashboard-dialog__buttons">
+          <q-btn flat label="취소" v-close-popup />
+          <q-btn flat label="제출" color="blue" @click="submitAssessment" />
+        </div>
+      </div>
+    </q-dialog>
   </div>
 </template>
 
@@ -138,7 +158,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      workspaceId: "getWorkspaceId"
+      workspaceId: "getWorkspaceId",
+      userInfo: "getUserInfo"
     })
   },
   data() {
@@ -149,25 +170,18 @@ export default {
       stepData: [
         {
           locked: false,
-          writed: [
-            {
-              label: "SWOT",
-              click: () => {
-                console.log("Click");
-              }
-            }
-          ]
-        },
-        {
-          locked: false,
           writed: []
         },
         {
-          locked: false,
+          locked: true,
           writed: []
         },
         {
-          locked: false,
+          locked: true,
+          writed: []
+        },
+        {
+          locked: true,
           writed: []
         },
         {
@@ -185,7 +199,12 @@ export default {
       },
       dummy_data_from_server: {
         isAllDone: true // 프로젝트의 모든 단계를 다 마치고 기여도확인을 할 수 있나? boolean
-      }
+      },
+      assessmentDialog: false,
+      assD: null,
+      assData: [],
+
+      documentCheck: true
     };
   },
   mounted() {
@@ -509,9 +528,19 @@ export default {
           this.movePage("/StepIntro?type=2");
           break;
         case "아이디어 도출":
-          this.movePage("/StepIntro?type=3");
+          console.log("hi");
+
+          this.$store.dispatch(T.ADD_CO_OP_TOOL, {
+            token: localStorage.getItem("token"),
+            document: {
+              title: "아이디어 도출",
+              workspaceId: this.workspaceId
+            },
+            cb: () => {}
+          });
+
           break;
-        case "IF":
+        case "해결 정리":
           this.movePage("/StepIntro?type=4");
           break;
       }
@@ -558,6 +587,45 @@ export default {
       return {
         "result-button": this.dummy_data_from_server.isAllDone
       };
+    },
+    setAssessmentData(members) {
+      members.forEach(m => {
+        let pushObj = {
+          email: m.email,
+          name: m.name,
+          score: ""
+        };
+
+        this.assData.push(pushObj);
+      });
+    },
+    submitAssessment() {
+      this.assessmentDialog = false;
+      let sendData = [];
+
+      this.assData.forEach(d => {
+        let pushObj = {
+          email: d.email,
+          score: d.score
+        };
+
+        if (this.userInfo.email != d.email) {
+          sendData.push(pushObj);
+        }
+      });
+
+      console.log(sendData);
+      this.$store.dispatch(T.ADD_ASSESSMENT, {
+        workspaceId: this.workspaceId,
+        assessment: {
+          members: sendData,
+          step: this.assD
+        },
+        token: localStorage.getItem("token"),
+        cb: () => {
+          console.log("S");
+        }
+      });
     }
   }
 };
@@ -692,6 +760,12 @@ export default {
     border-top: 1px solid black;
     button {
       width: 50%;
+    }
+  }
+
+  .ass {
+    label {
+      margin-bottom: 10px;
     }
   }
 }
