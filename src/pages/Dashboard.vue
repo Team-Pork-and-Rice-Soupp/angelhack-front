@@ -256,6 +256,10 @@ export default {
 
             vue.setAssessmentData(res.members);
             vue.setToos(res.tools);
+            if (res.documents.length > 0) {
+              vue.getDocument(res.documents);
+            }
+
             vue.$store.dispatch(T.CHANGE_MEMBERS, res.members);
           },
           cErr: err => {
@@ -515,6 +519,19 @@ export default {
             break;
         }
       });
+    },
+    getDocument(document) {
+      document.forEach(el => {
+        this.stepData[3].writed.push({
+          label: "아이디어 도출 문서",
+          click: () => {
+            const url = "http://kalin.iptime.org:4000/page/document/" + el.id;
+            window.open(url);
+          }
+        });
+      });
+
+      this.documentCheck = false;
     },
     addStep(type) {
       switch (type) {
