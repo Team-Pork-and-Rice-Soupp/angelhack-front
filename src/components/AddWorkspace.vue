@@ -109,18 +109,15 @@ export default {
 
       this.members.forEach(member => {
         if (returnCheck) {
-          ƒ;
           if (
             chileVue.find(v => v.memberInfo.email == member.email)
               .memberDescription == ""
           ) {
-            ƒ;
             alert("팀원 카드의 정보를 입력해주세요.");
             returnCheck = false;
           } else if (
             !chileVue.find(v => v.memberInfo.email == member.email).memberRole
           ) {
-            ƒ;
             alert("팀원 카드의 정보를 입력해주세요.");
             returnCheck = false;
           } else {
