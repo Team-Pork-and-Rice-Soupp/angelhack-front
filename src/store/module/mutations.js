@@ -7,6 +7,10 @@ export const mutations = {
     [T.CHANGE_USER_INFO](state, userInfo) {
         state.userInfo = userInfo;
     },
+
+    [T.CHANGE_MEMBERS](state, members) {
+        state.members = members;
+    },
     [T.LOGOUT](state) {
         state.userInfo = {
             email: "",

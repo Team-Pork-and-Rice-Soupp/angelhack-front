@@ -6,6 +6,10 @@ export const getters = {
         return state.userInfo;
     },
 
+    getMembers(state) {
+        return state.members;
+    },
+
 
 
     getWorkspaceId(state) {

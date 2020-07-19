@@ -6,6 +6,7 @@ export default function () {
     userInfo: {
       email: "",
       name: ""
-    }
+    },
+    members: []
   }
 }
