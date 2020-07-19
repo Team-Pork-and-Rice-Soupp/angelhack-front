@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import { T } from "../store/module/types.js";
+
 export default {
   props: ["workspace"],
   data() {
@@ -43,7 +45,19 @@ export default {
       }
     },
     onClickDelete() {
-      console.log(this.workspace);
+      let vue = this;
+      this.$store.dispatch(T.DELETE_WORKSPACE, {
+        workspaceId: this.workspace.id,
+        token: localStorage.getItem("token"),
+        cb: () => {
+          vue.$parent.getProjects();
+          alert("워크스페이스가 삭제되었습니다.")
+        },
+        cErr: err => {
+          console.log(err);
+          alert("오류가 발생하였습니다.");
+        }
+      });
       this.clickLock = false;
     }
   }

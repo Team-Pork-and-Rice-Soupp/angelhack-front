@@ -127,22 +127,28 @@ export const actions = {
             }
         };
         let api = axios.create();
-        /*
-                axios
-                    .all([
-                        api.delete(options.url(), {
-                            email: params.email,
-                            password: params.password
-                        })
-                    ])
-                    .then(responses => {
-                        console.log(responses);
-                        if (params.cb) params.cb();
-                    })
-                    .catch(error => {
-                        cErr(error.response);
-                    });
-        */
+
+        axios
+            .all([
+                api.delete(options.url(), {
+                    headers: {
+                        auth: params.token
+                    }
+                })
+            ])
+            .then(responses => {
+                console.log(responses);
+                let errors = responses.filter(res => {
+                    return res.status !== 204;
+                });
+                if (errors.length < 1) {
+                    params.cb();
+                }
+            })
+            .catch(error => {
+                cErr(error.response);
+            });
+
     },
     [T.GET_PROJECTS]({ commit }, params) {
         console.log(params);

@@ -1,16 +1,5 @@
 <template>
   <div class="project-list">
-    <!--
-    <workspace-card :workspaceId="item.id" v-for="(item, index) in projects" :key="index">
-      <template v-slot:card-title>{{item.title}}</template>
-      <template v-slot:card-description>{{item.description}}</template>
-    </workspace-card>
-
-    <workspace-card :addButton="true">
-      <template v-slot:add-card>new+</template>
-    </workspace-card>
-    -->
-
     <workspace-card v-for="(item, index) in projects" :key="index" :workspace="item" />
     <workspace-card />
   </div>
@@ -38,17 +27,16 @@ export default {
 
     this.$store.dispatch(T.CHANGE_TOP_STYLE, "");
 
-    const token = localStorage.getItem("token");
-    this.getProjects(token);
+    this.getProjects();
   },
   methods: {
     movePage(pageName) {
       this.$router.push(`${pageName}`);
     },
-    getProjects(token) {
+    getProjects() {
       let vue = this;
       this.$store.dispatch(T.GET_PROJECTS, {
-        token,
+        token: localStorage.getItem("token"),
         cb: res => {
           console.log(res);
           vue.projects = res;
