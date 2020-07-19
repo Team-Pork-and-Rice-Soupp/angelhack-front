@@ -1,6 +1,20 @@
-# for angelhack (angelhack-front)
+# 프로젝트 관리 도구 (2020 Angelhack Project)
 
-hackathon project
+2020 Angelhack
+
+돼지국빱 팀
+
+## Platforms and Development Stack
+
+Web Frontend
+
+- Vue.js 
+
+- Quasar Framework
+
+- Chart.js
+
+
 
 ## Install the dependencies
 ```bash
@@ -17,6 +31,3 @@ quasar dev
 ```bash
 quasar build
 ```
-
-### Customize the configuration
-See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
