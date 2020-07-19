@@ -5,7 +5,8 @@
     </div>
     <div class="create-tools__buttons">
       <q-btn label="나가기" @click="onClickBack" />
-      <q-btn label="저장하기" @click="onClickSave" />
+      <q-btn label="저장하기" @click="onClickSave" v-if="!isEdit" />
+      <q-btn label="수정하기" @click="onClickEdit" v-if="isEdit" />
     </div>
     <div class="create-tools__contents">
       <!-- 1-1 SWOT -->
@@ -73,7 +74,8 @@ export default {
   data() {
     return {
       title: "",
-      dialogOpened: false
+      dialogOpened: false,
+      isEdit: false
     };
   },
   mounted() {
@@ -83,6 +85,11 @@ export default {
     }
 
     this.setTool(this.$route.query.type);
+
+    if (this.$route.query.edit) {
+      this.isEdit = true;
+      this.getData();
+    }
   },
   methods: {
     movePage(pageName) {
@@ -157,7 +164,7 @@ export default {
     onClickExit() {
       this.movePage("/Dashboard?id=" + this.workspaceId);
     },
-    onClickSave() {
+    refineParams() {
       let toolData = {
         workSpaceId: this.workspaceId
       };
@@ -170,13 +177,13 @@ export default {
         case "1":
           switch (tool.second) {
             case "1":
-              toolData.toolName = "swot";
+              toolData.toolName = "SWOT";
               toolData.contents = JSON.stringify(
                 this.$children.find(v => v.vueName == "swot").swot
               );
               break;
             case "3":
-              toolData.toolName = "pest";
+              toolData.toolName = "PEST";
               toolData.contents = JSON.stringify(
                 this.$children.find(v => v.vueName == "pest").pest
               );
@@ -186,49 +193,48 @@ export default {
         case "2":
           switch (tool.second) {
             case "1":
-              toolData.toolName = "fiveWhys";
+              toolData.toolName = "FiveWhys";
               toolData.contents = JSON.stringify(
                 this.$children.find(v => v.vueName == "fiveWhys").fiveWhys
               );
               break;
             case "3":
-              toolData.toolName = "paretoChart";
-              toolData.contents = JSON.stringify(
-                this.$children.find(v => v.vueName == "paretoChart").data
-              );
+              toolData.toolName = "ParetoChart";
+              toolData.contents = JSON.stringify({
+                data: this.$children.find(v => v.vueName == "paretoChart").data,
+                scaleOption: this.$children.find(
+                  v => v.vueName == "paretoChart"
+                ).scaleOption
+              });
               break;
           }
           break;
         case "3":
           switch (tool.second) {
             case "1":
-              toolData.toolName = "logicTree";
+              toolData.toolName = "LogicTree";
               toolData.contents = JSON.stringify(
                 this.$children.find(v => v.vueName == "logicTree").logicTree
               );
               break;
             case "2":
-              toolData.toolName = "fiveWOneH";
+              toolData.toolName = "FiveWOneH";
               toolData.contents = JSON.stringify(
                 this.$children.find(v => v.vueName == "fiveWOneH").fiveWOneH
               );
               break;
           }
           break;
-        case "4":
-          toolData.toolName = "thinkIdea";
-          toolData.contents = JSON.stringify();
-          break;
         case "5":
           switch (tool.second) {
             case "1":
-              toolData.toolName = "asisTobe";
+              toolData.toolName = "AsisTobe";
               toolData.contents = JSON.stringify(
                 this.$children.find(v => v.vueName == "asisTobe").asisTobe
               );
               break;
             case "2":
-              toolData.toolName = "timeLine";
+              toolData.toolName = "TimeLine";
               toolData.contents = JSON.stringify(
                 this.$children.find(v => v.vueName == "timeLine").timeLine
               );
@@ -237,19 +243,126 @@ export default {
           break;
       }
 
+      return toolData;
+    },
+    onClickSave() {
+      let toolData = this.refineParams();
+
+      let vue = this;
+
       this.$store.dispatch(T.ADD_TOOL, {
         token: localStorage.getItem("token"),
         workspaceId: this.workspaceId,
         toolData,
-        cb: res => {
-          console.log(res);
+        cb: () => {
+          alert("도구가 작성되었습니다.");
+          vue.movePage("/Dashboard?id=" + this.workspaceId);
         },
         cErr: err => {
-          console.log(err);
+          alert("오류가 발생하였습니다.");
+          vue.movePage("/Dashboard?id=" + this.workspaceId);
         }
       });
+    },
+    onClickEdit() {
+      let toolData = this.refineParams();
 
-      console.log(toolData);
+      let vue = this;
+
+      this.$store.dispatch(T.EDIT_TOOL, {
+        token: localStorage.getItem("token"),
+        workspaceId: this.workspaceId,
+        toolData,
+        toolId: this.$route.query.id,
+        cb: () => {
+          alert("도구가 수정되었습니다.");
+          vue.movePage("/Dashboard?id=" + this.workspaceId);
+        },
+        cErr: err => {
+          alert("오류가 발생하였습니다.");
+          vue.movePage("/Dashboard?id=" + this.workspaceId);
+        }
+      });
+    },
+    getData() {
+      let vue = this;
+      this.$store.dispatch(T.GET_TOOLS, {
+        token: localStorage.getItem("token"),
+        workspaceId: this.workspaceId,
+        toolId: this.$route.query.id,
+        cb: res => {
+          const tool = {
+            first: vue.$route.query.type.split("-")[0],
+            second: vue.$route.query.type.split("-")[1]
+          };
+
+          switch (tool.first) {
+            case "1":
+              switch (tool.second) {
+                case "1":
+                  vue.$children.find(v => v.vueName == "swot").swot = res;
+                  break;
+                case "3":
+                  vue.$children.find(v => v.vueName == "pest").pest = res;
+                  break;
+              }
+              break;
+            case "2":
+              switch (tool.second) {
+                case "1":
+                  vue.$children.find(
+                    v => v.vueName == "fiveWhys"
+                  ).fiveWhys = res;
+                  break;
+                case "3":
+                  vue.$children.find(v => v.vueName == "paretoChart").data =
+                    res.data;
+                  vue.$children.find(
+                    v => v.vueName == "paretoChart"
+                  ).scaleOption = res.scaleOption;
+                  vue.$children
+                    .find(v => v.vueName == "paretoChart")
+                    .getTable();
+                  vue.$children
+                    .find(v => v.vueName == "paretoChart")
+                    .generateParetoChart(res.data);
+                  break;
+              }
+              break;
+            case "3":
+              switch (tool.second) {
+                case "1":
+                  vue.$children.find(
+                    v => v.vueName == "logicTree"
+                  ).logicTree = res;
+                  vue.$children.find(v => v.vueName == "logicTree").drawLine();
+
+                  break;
+                case "2":
+                  vue.$children.find(
+                    v => v.vueName == "fiveWOneH"
+                  ).fiveWOneH = res;
+                  break;
+              }
+              break;
+            case "5":
+              switch (tool.second) {
+                case "1":
+                  vue.$children.find(
+                    v => v.vueName == "asisTobe"
+                  ).asisTobe = res;
+                  break;
+                case "2":
+                  vue.$children.find(
+                    v => v.vueName == "timeLine"
+                  ).timeLine = res;
+                  vue.$children.find(v => v.vueName == "timeLine").setLine();
+                  break;
+              }
+              break;
+          }
+        }
+      });
     }
   }
 };

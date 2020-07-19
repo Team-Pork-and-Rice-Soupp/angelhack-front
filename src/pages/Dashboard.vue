@@ -234,7 +234,10 @@ export default {
             vue.title = res.title;
             vue.description = res.description;
             vue.members = res.members;
-            //vue.setToos(res.tools);
+
+            vue.setAssessmentData(res.members);
+            vue.setToos(res.tools);
+            vue.$store.dispatch(T.CHANGE_MEMBERS, res.members);
           },
           cErr: err => {
             console.log(err);
@@ -246,7 +249,253 @@ export default {
       }
     },
     setToos(tools) {
-      console.log(tools);
+      tools.forEach(t => {
+        let pushObj = {
+          label: t.type
+        };
+
+        switch (t.type) {
+          case "SWOT":
+            pushObj.click = () => {
+              this.$router.push(
+                "/CreateTools?type=1-1&edit=true&id=" + t.toolId
+              );
+            };
+            this.stepData[1].locked = false;
+            this.stepData[0].writed.push(pushObj);
+
+            if (
+              this.stepData[0].writed.findIndex(
+                el => el.label == "기여도 작성"
+              ) != -1
+            ) {
+              this.stepData[0].writed.splice(
+                this.stepData[0].writed.findIndex(
+                  el => el.label == "기여도 작성"
+                ),
+                1
+              );
+            }
+
+            this.stepData[0].writed.push({
+              label: "기여도 작성",
+              click: () => {
+                this.assessmentDialog = true;
+                this.assD = 0;
+              }
+            });
+
+            break;
+          case "PEST":
+            pushObj.click = () => {
+              this.$router.push(
+                "/CreateTools?type=1-3&edit=true&id=" + t.toolId
+              );
+            };
+            this.stepData[1].locked = false;
+            this.stepData[0].writed.push(pushObj);
+
+            if (
+              this.stepData[0].writed.findIndex(
+                el => el.label == "기여도 작성"
+              ) != -1
+            ) {
+              this.stepData[0].writed.splice(
+                this.stepData[0].writed.findIndex(
+                  el => el.label == "기여도 작성"
+                ),
+                1
+              );
+            }
+
+            this.stepData[0].writed.push({
+              label: "기여도 작성",
+              click: () => {
+                this.assessmentDialog = true;
+                this.assD = 0;
+              }
+            });
+            break;
+          case "FiveWhys":
+            pushObj.click = () => {
+              this.$router.push(
+                "/CreateTools?type=2-1&edit=true&id=" + t.toolId
+              );
+            };
+            this.stepData[2].locked = false;
+            this.stepData[1].writed.push(pushObj);
+
+            if (
+              this.stepData[1].writed.findIndex(
+                el => el.label == "기여도 작성"
+              ) != -1
+            ) {
+              this.stepData[1].writed.splice(
+                this.stepData[0].writed.findIndex(
+                  el => el.label == "기여도 작성"
+                ),
+                1
+              );
+            }
+
+            this.stepData[1].writed.push({
+              label: "기여도 작성",
+              click: () => {
+                this.assessmentDialog = true;
+                this.assD = 1;
+              }
+            });
+            break;
+          case "ParetoChart":
+            pushObj.click = () => {
+              this.$router.push(
+                "/CreateTools?type=2-3&edit=true&id=" + t.toolId
+              );
+            };
+            this.stepData[2].locked = false;
+            this.stepData[1].writed.push(pushObj);
+
+            if (
+              this.stepData[1].writed.findIndex(
+                el => el.label == "기여도 작성"
+              ) != -1
+            ) {
+              this.stepData[1].writed.splice(
+                this.stepData[0].writed.findIndex(
+                  el => el.label == "기여도 작성"
+                ),
+                1
+              );
+            }
+
+            this.stepData[1].writed.push({
+              label: "기여도 작성",
+              click: () => {
+                this.assessmentDialog = true;
+                this.assD = 1;
+              }
+            });
+            break;
+          case "LogicTree":
+            pushObj.click = () => {
+              this.$router.push(
+                "/CreateTools?type=3-1&edit=true&id=" + t.toolId
+              );
+            };
+            this.stepData[3].locked = false;
+            this.stepData[2].writed.push(pushObj);
+
+            if (
+              this.stepData[2].writed.findIndex(
+                el => el.label == "기여도 작성"
+              ) != -1
+            ) {
+              this.stepData[2].writed.splice(
+                this.stepData[0].writed.findIndex(
+                  el => el.label == "기여도 작성"
+                ),
+                1
+              );
+            }
+
+            this.stepData[2].writed.push({
+              label: "기여도 작성",
+              click: () => {
+                this.assessmentDialog = true;
+                this.assD = 2;
+              }
+            });
+            break;
+          case "FiveWOneH":
+            pushObj.click = () => {
+              this.$router.push(
+                "/CreateTools?type=3-2&edit=true&id=" + t.toolId
+              );
+            };
+            this.stepData[3].locked = false;
+            this.stepData[2].writed.push(pushObj);
+
+            if (
+              this.stepData[2].writed.findIndex(
+                el => el.label == "기여도 작성"
+              ) != -1
+            ) {
+              this.stepData[2].writed.splice(
+                this.stepData[0].writed.findIndex(
+                  el => el.label == "기여도 작성"
+                ),
+                1
+              );
+            }
+
+            this.stepData[2].writed.push({
+              label: "기여도 작성",
+              click: () => {
+                this.assessmentDialog = true;
+                this.assD = 2;
+              }
+            });
+            break;
+          case "AsisTobe":
+            pushObj.click = () => {
+              this.$router.push(
+                "/CreateTools?type=5-1&edit=true&id=" + t.toolId
+              );
+            };
+            this.stepData[4].writed.push(pushObj);
+
+            if (
+              this.stepData[4].writed.findIndex(
+                el => el.label == "기여도 작성"
+              ) != -1
+            ) {
+              this.stepData[4].writed.splice(
+                this.stepData[0].writed.findIndex(
+                  el => el.label == "기여도 작성"
+                ),
+                1
+              );
+            }
+
+            this.stepData[4].writed.push({
+              label: "기여도 작성",
+              click: () => {
+                this.assessmentDialog = true;
+                this.assD = 4;
+              }
+            });
+            break;
+          case "TimeLine":
+            pushObj.click = () => {
+              this.$router.push(
+                "/CreateTools?type=5-2&edit=true&id=" + t.toolId
+              );
+            };
+            this.stepData[4].writed.push(pushObj);
+
+            if (
+              this.stepData[4].writed.findIndex(
+                el => el.label == "기여도 작성"
+              ) != -1
+            ) {
+              this.stepData[4].writed.splice(
+                this.stepData[0].writed.findIndex(
+                  el => el.label == "기여도 작성"
+                ),
+                1
+              );
+            }
+
+            this.stepData[4].writed.push({
+              label: "기여도 작성",
+              click: () => {
+                this.assessmentDialog = true;
+                this.assD = 4;
+              }
+            });
+            break;
+        }
+      });
     },
     addStep(type) {
       switch (type) {

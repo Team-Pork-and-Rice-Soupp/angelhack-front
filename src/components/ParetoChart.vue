@@ -1,30 +1,3 @@
-<!--
-  서버로 보내고 받는 데이터:
-  this.data ===
-  {
-    { number: 1, item: "전자레인지", quantity: 85 },
-    { number: 2, item: "선풍기", quantity: 32 },
-    { number: 3, item: "전등 스위치", quantity: 4 },
-    ...    
-  }
-
-  이 컴포넌트(this)가 보내고 받을 데이터를 담고 있는 놈 : 
-  data
-  -> 나중에 dispatch(T.~, this.data) 이렇게 보내면 됨.
-     받을 땐 
-      this.data = 받은 데이터;
-      this.generateParetoChart(this.data);
-     하면 된다.
-
-  표 그리는 방법:
-  서버에서 받은 데이터를 this.data에 넣으면 됨.
-
-  파레토차트 그리는 방법:
-  this.generateParetoChart(서버에서 받은 데이터); 이렇게 하면 됨.
-  this.data = 서버에서 받은 데이터; 를 했다면,
-  위의 함수의 파라미터에 this.data 넣으면 됨.
--->
-
 <template>
   <div class="pareto-chart">
     <div>
@@ -260,11 +233,15 @@ export default {
       this.refreshChart *= -1;
     },
     enableTable() {
-      this.options.scales.xAxes[0].scaleLabel.labelString = this.scaleOption.xScaleLabel;
+      this.refreshChart *= -1;
+      this.getTable();
+      
+    },
+    getTable(){
+this.options.scales.xAxes[0].scaleLabel.labelString = this.scaleOption.xScaleLabel;
       this.options.scales.yAxes[0].scaleLabel.labelString = this.scaleOption.yScaleLabel;
       this.columns[1].label = this.scaleOption.xScaleLabel;
       this.columns[2].label = this.scaleOption.yScaleLabel;
-      this.refreshChart *= -1;
       this.tableEnabled = true;
     },
     addNewRow() {
