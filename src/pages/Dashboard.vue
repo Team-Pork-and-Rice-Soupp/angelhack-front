@@ -21,7 +21,7 @@
         <div class="step-wrapper">
           <step-fab
             title="문제 인식"
-            description="설명"
+            description
             :stepData="stepData[0]"
             :addStep="addStep"
             ref="fab01"
@@ -29,7 +29,7 @@
           <hr />
           <step-fab
             title="문제 정의"
-            description="설명"
+            description
             :stepData="stepData[1]"
             :addStep="addStep"
             ref="fab02"
@@ -37,7 +37,7 @@
           <hr />
           <step-fab
             title="문제 정검"
-            description="설명"
+            description
             :stepData="stepData[2]"
             :addStep="addStep"
             ref="fab03"
@@ -45,7 +45,7 @@
           <hr />
           <step-fab
             title="아이디어 도출"
-            description="설명"
+            description
             :stepData="stepData[3]"
             :addStep="addStep"
             ref="fab04"
@@ -53,7 +53,7 @@
           <hr />
           <step-fab
             title="해결 정리"
-            description="설명"
+            description
             :stepData="stepData[4]"
             :addStep="addStep"
             ref="fab05"

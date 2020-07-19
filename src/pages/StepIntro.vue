@@ -61,7 +61,7 @@ export default {
           break;
         case "1":
           this.title = "문제 정의";
-          this.description = "작성중 입니다.";
+          this.description = "";
           this.contents = [
             {
               name: "5whys",
@@ -79,7 +79,7 @@ export default {
           break;
         case "2":
           this.title = "문제 정검";
-          this.description = "작성중 입니다.";
+          this.description = "";
           this.contents = [
             {
               name: "Logic Tree",
@@ -97,12 +97,12 @@ export default {
           break;
         case "3":
           this.title = "아이디어 도출";
-          this.description = "작성중 입니다.";
+          this.description = "";
           this.contents = [];
           break;
         case "4":
           this.title = "해결 정리";
-          this.description = "작성중 입니다.";
+          this.description = "";
           this.contents = [
             {
               name: "ASIS-TOBE",

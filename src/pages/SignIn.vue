@@ -1,7 +1,9 @@
 <template>
   <div class="signin">
     <div class="signin__card">
-      <h1>서비스 이름 or 서비스 로고</h1>
+      <div class="signin-title">엔젤핵 해커톤</div>
+      <div class="signin-title">돼지국빱팀</div>
+      <div class="signin-title">프로젝트 관리 도구</div>
       <q-input label="Email" type="email" v-model="email" />
       <q-input label="Password" type="password" v-model="password" />
       <q-slide-transition>
@@ -113,8 +115,15 @@ export default {
     justify-content: center;
     align-items: center;
     margin-top: 10%;
-    h1 {
-      font-size: 18px;
+
+    .signin-title {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .signin-title:nth-child(3) {
+      font-size: 24px;
+      font-weight: bold;
     }
 
     label {
