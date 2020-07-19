@@ -1,73 +1,51 @@
 <template>
-  <div class="work-space-form">
+  <div class="add-workspace-card">
     <!-- 타이틀, 설명, 멤버 검색창 등 인풋 묶음 -->
-    <div class="inputs">
-      <q-input v-model="title" label="title" />
-      <q-input v-model="description" label="description" />
+    <q-card class="add-workspace-card__info">
+      <div class="info-title">워크스페이스 정보</div>
+      <q-input filled v-model="title" label="제목" />
+      <q-input filled v-model="description" label="설명" />
 
       <q-form class="search-form" @submit="searchMember">
-        <q-input ref="keyword" v-model="keyword" placeholder="검색어를 입력해주세요." />
+        <q-input filled ref="keyword" v-model="keyword" placeholder="팀원 이메일 검색" />
 
         <div class="search-form__button">
           <q-btn flat label="search" color="blue" type="submit" />
         </div>
       </q-form>
-    </div>
+    </q-card>
 
     <!-- 멤버 카드들 -->
-    <div class="member-cards">
-      <add-member-card v-for="(member, index) in members" :key="index" :memberInfo="member">
-        <template v-slot:input>
-          <q-input filled label="설명" v-model="member.description" style="margin-bottom:10px;" :disable="member.isMe" />
-          <q-input filled label="역할" v-model="member.role" :disable="member.isMe" />
-        </template>
-        <template v-slot:deleteBtn>
-          <q-btn label="삭제" @click="onClickDelete(member)" flat v-if="!member.isMe" />
-        </template>
-      </add-member-card>
+    <div class="add-workspace-card__members">
+      <add-member-card v-for="(member, index) in members" :key="index" :memberInfo="member" />
     </div>
 
     <!-- Dialog -->
-    <q-dialog v-model="dialogOpened" @hide="selectedMembers = []">
-      <div class="search-result-list-card">
-        <q-card>
-          <q-card-section>
-            <q-scroll-area :thumb-style="thumbStyle" :bar-style="barStyle" class="scroll-area">
-              <ul class="result-list">
-                <li
-                  class="result"
-                  :class="result.selected? 'is-selected' : ''"
-                  v-for="(result, index) in searchResults"
-                  :key="index"
-                >
-                  <div class="result__info">
-                    <div>{{ result.name }}</div>
-                    <div>{{ result.email }}</div>
-                  </div>
-                  <q-btn
-                    v-if="!result.selected"
-                    label="select"
-                    color="positive"
-                    flat
-                    @click="onResultClick(result)"
-                  />
-                  <q-btn
-                    v-if="result.selected"
-                    label="remove"
-                    color="negative"
-                    flat
-                    @click="onResultClick(result)"
-                  />
-                </li>
-              </ul>
-            </q-scroll-area>
-          </q-card-section>
+    <q-dialog v-model="dialogOpened" @hide="hideDialog">
+      <div class="dashboard-dialog">
+        <div class="dashboard-dialog__text">
+          <div v-for="(user, index) in searchResults" :key="index" class="user-div">
+            <div class="user-div__info">
+              <span>{{ user.name }}</span>
+              <span>{{ user.email }}</span>
+            </div>
+            <div class="user-div__buttons">
+              <q-btn
+                :label="user.selected ? 'delete' :'select'"
+                :color="user.selected ? 'negative' :'positive'"
+                flat
+                @click="onResultClick(user)"
+              />
+            </div>
 
-          <q-card-actions>
-            <q-btn label="Confirm" flat color="primary" @click="onclickConfirm" />
-            <q-btn label="Cancel" flat color="negative" v-close-popup />
-          </q-card-actions>
-        </q-card>
+            <hr v-if="index + 1 != searchResults.length" />
+          </div>
+        </div>
+
+        <div class="dashboard-dialog__buttons">
+          <q-btn label="Cancel" flat color="negative" v-close-popup />
+          <q-btn label="Confirm" flat color="primary" @click="onclickConfirm" />
+        </div>
       </div>
     </q-dialog>
   </div>
@@ -88,15 +66,6 @@ export default {
       userInfo: "getUserInfo"
     })
   },
-  created() {
-    for (let i = 0; i < 20; i++) {
-      this.searchResults.push({
-        name: `dummy's name ${i}`,
-        email: `dummys${i}@emaidddddddddl.com`,
-        selected: false
-      });
-    }
-  },
   data() {
     return {
       vueName: "addWorkspace",
@@ -115,6 +84,7 @@ export default {
         width: "5px",
         opacity: 0.75
       },
+
       searchResults: [],
 
       barStyle: {
@@ -127,7 +97,6 @@ export default {
     };
   },
   mounted() {
-    console.log(this.userInfo);
     if (this.userInfo.email) {
       this.setMyMember(this.userInfo);
     }
@@ -135,77 +104,81 @@ export default {
   methods: {
     refineMembers() {
       let refinedMemberList = [];
-      this.members.forEach(member => {
-        refinedMemberList.push({
-          email: member.email,
-          description: member.description,
-          role: member.role
-        })
-      });
-      return refinedMemberList;
-    },
-    seeMembers() {
-      console.log("see this.members >> ", this.members);
-    },
-    onClickDelete(member) {
-      let index = this.members.findIndex(mem => mem.email == member.email);
-      this.members.splice(index, 1);
-      console.log("deleted! this.members >> ", this.members);
-    },
-    onclickConfirm() {
-      console.log("this.members >> ", this.members);
-      console.log("this.selectedMembers >> ", this.selectedMembers);
+      const chileVue = this.$children.filter(v => v.vueName == "addMemberCard");
+      let returnCheck = true;
 
-      
-      // 1. 이미 있는지 비교
-      let flag, duplicate;
-      let filtered = [];
-      this.selectedMembers.forEach((selMember, sIndex) => {
-        flag = true;
-        this.members.forEach((member, mIndex) => {
-          if(member.email == selMember.email) {
-            flag = false;
-            duplicate = true;
+      this.members.forEach(member => {
+        if (returnCheck) {
+          ƒ;
+          if (
+            chileVue.find(v => v.memberInfo.email == member.email)
+              .memberDescription == ""
+          ) {
+            ƒ;
+            alert("팀원 카드의 정보를 입력해주세요.");
+            returnCheck = false;
+          } else if (
+            !chileVue.find(v => v.memberInfo.email == member.email).memberRole
+          ) {
+            ƒ;
+            alert("팀원 카드의 정보를 입력해주세요.");
+            returnCheck = false;
+          } else {
+            refinedMemberList.push({
+              email: member.email,
+              description: chileVue.find(
+                v => v.memberInfo.email == member.email
+              ).memberDescription,
+              role: chileVue.find(v => v.memberInfo.email == member.email)
+                .memberRole
+            });
           }
-          // if(member.email != selMember.email) {
-          //   filtered.push(selMember);
-          // } else  {            
-          //   flag = false;
-          //   console.log("same one detected!");
-          // }
-        });
-        if(flag) {
-          filtered.push(selMember);
         }
       });
 
-      console.log("deletion in selectedMembers done!")
-      console.log("this.members >> ", this.members);
-      console.log("filtered ones! >> ", filtered);
-
-      let pushed = false;
-      // 2. this.members에 삽입
-      filtered.forEach(selMember => {
-        this.members.push(selMember);
-        pushed = true;
-      });
-
-      // 3. 이미 있는 놈을 리스트에 추가하려 했다면, 추가 후 alert해줘라
-      if(duplicate) {
-        alert('중복되는 인물은 추가되지 않습니다.');
+      if (returnCheck) {
+        return refinedMemberList;
+      } else {
+        return false;
       }
-      if(pushed) {
-        this.selectedMembers = [];
-        this.dialogOpened = false;
-      }      
     },
-    // addingMember() {
-    //   this.$children
-    //     .find(el => el.vueName == "add-members")
-    //     .addMember(res => {
-    //       this.members.push(res);
-    //     });
-    // },
+    onclickConfirm() {
+      if (this.selectedMembers.length) {
+        // 1. 이미 있는지 비교
+        let flag, duplicate;
+        let filtered = [];
+        this.selectedMembers.forEach((selMember, sIndex) => {
+          flag = true;
+          this.members.forEach((member, mIndex) => {
+            if (member.email == selMember.email) {
+              flag = false;
+              duplicate = true;
+            }
+          });
+          if (flag) {
+            filtered.push(selMember);
+          }
+        });
+
+        let pushed = false;
+        // 2. this.members에 삽입
+        filtered.forEach(selMember => {
+          this.members.push(selMember);
+          pushed = true;
+        });
+
+        // 3. 이미 있는 놈을 리스트에 추가하려 했다면, 추가 후 alert해줘라
+        if (duplicate) {
+          alert("중복되는 인물은 추가되지 않습니다.");
+        }
+        if (pushed) {
+          this.selectedMembers = [];
+          this.dialogOpened = false;
+        }
+      } else {
+        alert("팀원을 선택해주세요.");
+      }
+    },
     searchMember() {
       if (this.keyword == "") {
         alert("검색어를 입력해주세요.");
@@ -216,10 +189,10 @@ export default {
           token: localStorage.getItem("token"),
           cb: res => {
             console.log("search results >> ", res);
-            res.forEach(result => {
-              result.selected = false;
-            })
             if (res.length > 0) {
+              res.forEach(result => {
+                result.selected = false;
+              });
               vue.searchResults = res;
               vue.dialogOpened = true;
             } else {
@@ -234,8 +207,6 @@ export default {
       }
     },
     onResultClick(result) {
-      console.log("selected one >> ", result);
-      console.log("this.selectedMembers before splicing >> ", this.selectedMembers);
       if (result.selected) {
         const index = this.selectedMembers.findIndex(
           selected => selected.email == result.email
@@ -248,31 +219,51 @@ export default {
         this.selectedMembers.push(result);
         result.selected = true;
       }
-      console.log("this.selectedMembers >> ", this.selectedMembers);
     },
     setMyMember(userInfo) {
       this.members.push({
         name: userInfo.name,
         email: userInfo.email,
-        description: "테스트입니다.",
-        role: "MANAGER",
         isMe: true
       });
+    },
+    hideDialog() {
+      this.keyword = "";
+      this.selectedMembers = [];
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.work-space-form {
-  width: 30%;
-  .inputs {
-    margin-bottom: 40px;
+.add-workspace-card {
+  display: flex;
+  & &__info {
+    padding: 10px 15px;
+    width: 350px;
+    height: fit-content;
+    .info-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    label {
+      margin-bottom: 10px;
+    }
     .search-form {
       display: flex;
       justify-content: space-between;
+
+      label {
+        width: calc(100% - 90px);
+      }
+
       &__button {
-        height: 100%;
+        height: 56px;
+        button {
+          height: 100%;
+        }
       }
     }
   }
@@ -280,6 +271,28 @@ export default {
 </style>
 
 <style lang="scss">
+.user-div {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  &__info {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__buttons {
+    width: 30%;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  hr {
+    width: 100%;
+    margin: 4px 0;
+  }
+}
+
 .search-result-list-card {
   width: 800px;
 

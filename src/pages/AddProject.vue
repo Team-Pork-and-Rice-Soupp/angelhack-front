@@ -35,8 +35,7 @@ export default {
       let addWorkspaceInfo = {
         title: this.$children.find(v => v.vueName == "addWorkspace").title,
         description: this.$children.find(v => v.vueName == "addWorkspace")
-          .description,
-        members: this.$children.find(v => v.vueName == "addWorkspace").refineMembers()
+          .description
       };
 
       if (addWorkspaceInfo.title == "") {
@@ -45,19 +44,22 @@ export default {
         alert("워크스페이스의 설명을 입력해주세요.");
       } else {
         let vue = this;
-        console.log("addWorkspaceInfo >> ", addWorkspaceInfo);
-
-        this.$store.dispatch(T.ADD_WORKSPACE, {
-          token: localStorage.getItem("token"),
-          addWorkspaceInfo,
-          cb: () => {
-            vue.movePage("/ProjectList");
-            alert("워크스페이스가 생성되었습니다.");
-          },
-          cErr: () => {
-            alert("문제가 발생하였습니다.");
-          }
-        });
+        addWorkspaceInfo.members = this.$children
+          .find(v => v.vueName == "addWorkspace")
+          .refineMembers();
+        if (addWorkspaceInfo.members) {
+          this.$store.dispatch(T.ADD_WORKSPACE, {
+            token: localStorage.getItem("token"),
+            addWorkspaceInfo,
+            cb: () => {
+              vue.movePage("/ProjectList");
+              alert("워크스페이스가 생성되었습니다.");
+            },
+            cErr: () => {
+              alert("문제가 발생하였습니다.");
+            }
+          });
+        }
       }
     }
   }
