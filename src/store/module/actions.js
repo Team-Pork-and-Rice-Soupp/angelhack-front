@@ -411,10 +411,10 @@ export const actions = {
             .then(responses => {
                 console.log(responses);
                 let errors = responses.filter(res => {
-                    return res.status !== 200;
+                    return res.status !== 201;
                 });
                 if (errors.length < 1) {
-                    params.cb(responses[0].data);
+                    params.cb();
                 }
 
             })
