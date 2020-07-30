@@ -3,6 +3,7 @@
 > 온라인 프로젝트 협업 관리 도구
 
 ![version]
+![license]
 ![support]
 
 2020 Angelhack - 돼지국빱 팀
@@ -50,6 +51,6 @@ Frontend Developer
 
 [version]: https://img.shields.io/badge/version-v1.0.1-blue
 [support]: https://img.shields.io/badge/support-End-black
-
+[license]: https://img.shields.io/github/license/Team-Pork-and-Rice-Soupp/angelhack-front
 
 
