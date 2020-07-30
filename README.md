@@ -4,6 +4,7 @@
 
 ![version]
 ![license]
+![lang]
 ![support]
 
 2020 Angelhack - 돼지국빱 팀
@@ -52,5 +53,6 @@ Frontend Developer
 [version]: https://img.shields.io/badge/version-v1.0.1-blue
 [support]: https://img.shields.io/badge/support-End-black
 [license]: https://img.shields.io/github/license/Team-Pork-and-Rice-Soupp/angelhack-front
+[lang]: https://img.shields.io/github/languages/top/Team-Pork-and-Rice-Soupp/angelhack-front
 
 
